@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0-jammy
+    container_name: sooftcode-db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: sooftcode-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://mongodb:27017/sooftcode
+      - JWT_SECRET=sooftcode_enterprise_level_jwt_secret_key_2026
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./frontend
+    container_name: sooftcode-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NEXT_PUBLIC_API_URL=http://localhost:5000/api
+    depends_on:
+      - backend
+
+volumes:
+  mongodb_data:
