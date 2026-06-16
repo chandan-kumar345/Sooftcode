@@ -1,0 +1,265 @@
+@import "tailwindcss";
+
+:root {
+  --background: #FCFCFD;
+  --foreground: #0F172A;
+  --primary: #8B5CF6; /* Matching purple logo color */
+  --secondary: #2563EB; /* Matching blue logo color */
+  --accent: #C084FC; /* Light purple accent */
+  --card: #FFFFFF;
+  --card-border: #E2E8F0;
+  --muted: #64748B;
+  --input-bg: #FFFFFF;
+  --input-border: #CBD5E1;
+  --accent-glow: rgba(139, 92, 246, 0.1);
+  --primary-glow: rgba(37, 99, 235, 0.1);
+  --grid-color: rgba(15, 23, 42, 0.04);
+}
+
+.dark {
+  --background: #0B0F19;
+  --foreground: #F8FAFC;
+  --primary: #8B5CF6;
+  --secondary: #2563EB;
+  --accent: #A855F7;
+  --card: #131B2E;
+  --card-border: #1E293B;
+  --muted: #94A3B8;
+  --input-bg: #1E293B;
+  --input-border: #334155;
+  --accent-glow: rgba(139, 92, 246, 0.2);
+  --primary-glow: rgba(37, 99, 235, 0.2);
+  --grid-color: rgba(255, 255, 255, 0.03);
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
+  --color-muted: var(--muted);
+  --color-input-bg: var(--input-bg);
+  --color-input-border: var(--input-border);
+  --font-sans: var(--font-geist-sans), sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+}
+
+/* Liquid reflecting button effect */
+.btn-liquid {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  background-size: 200% 200%;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+}
+
+.btn-liquid:hover {
+  background-position: 100% 100%;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  transform: translateY(-2px) scale(1.01);
+}
+
+.btn-liquid:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.btn-liquid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: 0.6s;
+  pointer-events: none;
+}
+
+.btn-liquid:hover::before {
+  left: 150%;
+}
+
+/* Outlined/Secondary liquid reflecting button effect */
+.btn-liquid-secondary {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 9999px !important; /* Semi-circle rounded pill style */
+  color: var(--foreground);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .btn-liquid-secondary {
+  background: rgba(19, 27, 46, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-liquid-secondary:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+  transform: translateY(-2px) scale(1.01);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark .btn-liquid-secondary:hover {
+  background: rgba(19, 27, 46, 0.6);
+  border-color: var(--primary);
+}
+
+.btn-liquid-secondary:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.btn-liquid-secondary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: 0.6s;
+  pointer-events: none;
+}
+
+.btn-liquid-secondary:hover::before {
+  left: 150%;
+}
+
+/* Nav Consultation Button style (pink-to-orange gradient matching design mockup) */
+.btn-liquid-nav {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #FF007A 0%, #F97316 100%);
+  background-size: 200% 200%;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  border-radius: 9999px !important;
+}
+
+.btn-liquid-nav:hover {
+  background-position: 100% 100%;
+  box-shadow: 0 0 20px rgba(255, 0, 122, 0.4);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.btn-liquid-nav:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-liquid-nav::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: 0.6s;
+  pointer-events: none;
+}
+
+.btn-liquid-nav:hover::before {
+  left: 150%;
+}
+
+
+/* Custom HTML properties */
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease;
+  min-height: 100%;
+}
+
+/* Custom premium scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+/* Glassmorphism helpers */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.dark .glass {
+  background: rgba(19, 27, 46, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+
+
+/* Accent Glow Circle styling */
+.glow-primary {
+  filter: blur(120px);
+  background: var(--primary-glow);
+}
+
+.glow-accent {
+  filter: blur(120px);
+  background: var(--accent-glow);
+}
+
+/* Slide in animation class helpers */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.3; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
