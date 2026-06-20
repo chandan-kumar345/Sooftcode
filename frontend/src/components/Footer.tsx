@@ -4,9 +4,50 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { Code2, Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+import { 
+  Mail, 
+  Phone, 
+  MapPin, 
+  Globe, 
+  Send, 
+  CheckCircle2, 
+  AlertCircle 
+} from 'lucide-react';
 import { API_URL } from '@/context/AuthContext';
 import BrandLogo from '@/components/BrandLogo';
+import { FooterBackgroundGradient, TextHoverEffect } from '@/components/ui/hover-footer';
+
+// Custom inline SVGs for brand icons since they are removed from modern lucide-react versions
+const FacebookIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px]" {...props}>
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
+
+const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px]" {...props}>
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+  </svg>
+);
+
+const TwitterIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px]" {...props}>
+    <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
+    <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
+  </svg>
+);
+
+const DribbbleIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-[18px] h-[18px]" {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.49-11.05 1-11.6 8.56" />
+  </svg>
+);
+
 
 interface NewsletterForm {
   email: string;
@@ -35,126 +76,209 @@ export default function Footer() {
     }
   };
 
+  const footerLinks = [
+    {
+      title: "Services",
+      links: [
+        { label: "Custom Software Development", href: "/services" },
+        { label: "Web App Development", href: "/services" },
+        { label: "Mobile App Development", href: "/services" },
+        { label: "SaaS Solutions & Development", href: "/services" },
+        { label: "Cloud Architecting & DevSecOps", href: "/services" },
+        { label: "QA Automation & Testing", href: "/services" },
+        { label: "AI Solutions Integration", href: "/services" }
+      ],
+    },
+    {
+      title: "Company",
+      links: [
+        { label: "About Us", href: "/about" },
+        { label: "Services Showcase", href: "/services" },
+        { label: "Our Portfolio", href: "/portfolio" },
+        { label: "Careers & Jobs", href: "/careers", pulse: true },
+        { label: "Insights & Blog", href: "/blog" },
+        { label: "Contact Inquiry", href: "/contact" }
+      ],
+    },
+  ];
+
+  const contactInfo = [
+    {
+      icon: <Mail size={16} className="text-primary" />,
+      text: "hello@sooftcode.com",
+      href: "mailto:hello@sooftcode.com",
+    },
+    {
+      icon: <Phone size={16} className="text-primary" />,
+      text: "+91 86373 73116",
+      href: "tel:+918637373116",
+    },
+    {
+      icon: <MapPin size={16} className="text-primary" />,
+      text: "Suite 800, Tech Towers, New York, NY",
+    },
+  ];
+
+  const socialLinks = [
+    { icon: <FacebookIcon />, label: "Facebook", href: "#" },
+    { icon: <InstagramIcon />, label: "Instagram", href: "#" },
+    { icon: <TwitterIcon />, label: "Twitter", href: "#" },
+    { icon: <DribbbleIcon />, label: "Dribbble", href: "#" },
+    { icon: <Globe size={18} />, label: "Globe", href: "#" },
+  ];
+
   return (
-    <footer className="bg-card border-t border-card-border transition-colors duration-300 pt-16 pb-8 mt-auto">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-        {/* Brand Column */}
-        <div className="flex flex-col space-y-4">
-          <Link href="/">
-            <BrandLogo />
-          </Link>
-          <p className="text-muted text-sm leading-relaxed">
-            Architecting premium software solutions and cloud infrastructures for scaling enterprises. Transforming complex concepts into simple, elegant digital systems.
+    <motion.footer
+      initial={{ opacity: 0, y: 50, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="bg-card/30 border-t border-card-border/80 relative h-fit rounded-t-[2.5rem] overflow-hidden pt-16 pb-8 transition-colors duration-300 mt-auto"
+    >
+      <div className="max-w-7xl mx-auto px-6 md:px-12 z-10 relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8 lg:gap-16 pb-12">
+          
+          {/* Brand Column */}
+          <div className="flex flex-col space-y-4">
+            <Link href="/">
+              <BrandLogo />
+            </Link>
+            <p className="text-muted text-sm leading-relaxed">
+              Architecting premium software solutions and cloud infrastructures for scaling enterprises. Transforming complex concepts into simple, elegant digital systems.
+            </p>
+          </div>
+
+          {/* Footer links mapping */}
+          {footerLinks.map((section) => (
+            <div key={section.title}>
+              <h4 className="text-foreground text-sm font-bold tracking-wider uppercase mb-6">
+                {section.title}
+              </h4>
+              <ul className="space-y-3 text-sm">
+                {section.links.map((link) => (
+                  <li key={link.label} className="relative w-fit">
+                    <Link
+                      href={link.href}
+                      className="text-muted hover:text-primary transition-colors duration-200"
+                    >
+                      {link.label}
+                    </Link>
+                    {link.pulse && (
+                      <span className="absolute top-1/2 -translate-y-1/2 -right-3.5 w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          {/* Newsletter & Contact Column */}
+          <div className="flex flex-col space-y-6">
+            <div>
+              <h4 className="text-foreground text-sm font-bold tracking-wider uppercase mb-4">
+                Newsletter
+              </h4>
+              <p className="text-muted text-xs leading-relaxed mb-4">
+                Get the latest insights on tech trends, architecture strategies, and cloud optimization.
+              </p>
+              
+              <form onSubmit={handleSubmit(onSubmit)} className="relative flex items-center mb-4">
+                <input
+                  type="email"
+                  placeholder="Enter email address"
+                  className={`w-full text-xs py-2.5 pl-4 pr-10 rounded-xl bg-background border ${
+                    errors.email ? 'border-red-500' : 'border-input-border'
+                  } focus:outline-none focus:border-primary text-foreground`}
+                  {...register('email', { 
+                    required: 'Email is required',
+                    pattern: { value: /^\S+@\S+$/i, message: 'Invalid email address' }
+                  })}
+                />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="absolute right-1 p-2 rounded-lg bg-primary hover:bg-primary/95 text-white transition-colors cursor-pointer disabled:opacity-50"
+                  aria-label="Subscribe"
+                >
+                  <Send size={12} />
+                </button>
+              </form>
+              {errors.email && (
+                <span className="text-red-500 text-xs mt-1 block">{errors.email.message}</span>
+              )}
+              {successMsg && (
+                <div className="flex items-center space-x-1.5 text-green-500 text-xs mt-2.5">
+                  <CheckCircle2 size={12} />
+                  <span>{successMsg}</span>
+                </div>
+              )}
+              {errorMsg && (
+                <div className="flex items-center space-x-1.5 text-red-500 text-xs mt-2.5">
+                  <AlertCircle size={12} />
+                  <span>{errorMsg}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Direct Contact info */}
+            <ul className="space-y-3 text-xs">
+              {contactInfo.map((item, i) => (
+                <li key={i} className="flex items-center space-x-2.5 text-muted">
+                  {item.icon}
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      className="hover:text-primary transition-colors"
+                    >
+                      {item.text}
+                    </a>
+                  ) : (
+                    <span>{item.text}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        
+        {/* SVG Text hover effect */}
+        <div className="lg:flex hidden h-[18rem] relative select-none mt-8 mb-4">
+          <TextHoverEffect text="SOOFTCODE" className="z-10" />
+        </div>
+
+        <hr className="border-t border-card-border/60 my-6" />
+
+        {/* Footer bottom */}
+        <div className="flex flex-col md:flex-row justify-between items-center text-xs text-muted space-y-4 md:space-y-0 relative z-20">
+          {/* Social icons */}
+          <div className="flex space-x-6">
+            {socialLinks.map(({ icon, label, href }) => (
+              <a
+                key={label}
+                href={href}
+                aria-label={label}
+                className="hover:text-primary transition-colors"
+              >
+                {icon}
+              </a>
+            ))}
+          </div>
+
+          {/* Policy & Admin Links */}
+          <div className="flex space-x-6">
+            <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
+            <Link href="/admin" className="hover:text-primary transition-colors font-semibold text-foreground">Admin Portal</Link>
+          </div>
+
+          {/* Copyright */}
+          <p className="text-center md:text-left">
+            &copy; {new Date().getFullYear()} Sooftcode. All rights reserved.
           </p>
         </div>
-
-        {/* Services Column */}
-        <div>
-          <h3 className="font-bold text-sm text-foreground tracking-wider uppercase mb-5">Services</h3>
-          <ul className="space-y-3 text-sm">
-            {[
-              'Custom Software Development',
-              'Web App Development',
-              'Mobile App Development',
-              'SaaS Solutions & Development',
-              'Cloud Architecting & DevSecOps',
-              'QA Automation & Testing',
-              'AI Solutions Integration'
-            ].map((srv) => (
-              <li key={srv}>
-                <Link href="/services" className="text-muted hover:text-primary transition-colors">
-                  {srv}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Quick Links Column */}
-        <div>
-          <h3 className="font-bold text-sm text-foreground tracking-wider uppercase mb-5">Company</h3>
-          <ul className="space-y-3 text-sm">
-            {[
-              { name: 'About Us', path: '/about' },
-              { name: 'Services Showcase', path: '/services' },
-              { name: 'Our Portfolio', path: '/portfolio' },
-              { name: 'Careers & Jobs', path: '/careers' },
-              { name: 'Insights & Blog', path: '/blog' },
-              { name: 'Contact Inquiry', path: '/contact' }
-            ].map((item) => (
-              <li key={item.name}>
-                <Link href={item.path} className="text-muted hover:text-primary transition-colors">
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Newsletter & Contact Info Column */}
-        <div className="flex flex-col space-y-6">
-          <div>
-            <h3 className="font-bold text-sm text-foreground tracking-wider uppercase mb-4">Newsletter</h3>
-            <p className="text-muted text-xs leading-relaxed mb-4">
-              Get the latest insights on tech trends, architecture strategies, and cloud optimization directly in your inbox.
-            </p>
-            <form onSubmit={handleSubmit(onSubmit)} className="relative flex items-center">
-              <input
-                type="email"
-                placeholder="Enter email address"
-                className={`w-full text-sm py-2.5 pl-4 pr-10 rounded-xl bg-background border ${
-                  errors.email ? 'border-red-500' : 'border-input-border'
-                } focus:outline-none focus:border-primary text-foreground`}
-                {...register('email', { 
-                  required: 'Email is required',
-                  pattern: { value: /^\S+@\S+$/i, message: 'Invalid email address' }
-                })}
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="absolute right-1 p-2 rounded-lg bg-primary hover:bg-secondary text-white transition-colors cursor-pointer disabled:opacity-50"
-                aria-label="Subscribe"
-              >
-                <Send size={14} />
-              </button>
-            </form>
-            {errors.email && (
-              <span className="text-red-500 text-xs mt-1 block">{errors.email.message}</span>
-            )}
-            
-            {/* Status messages */}
-            {successMsg && (
-              <div className="flex items-center space-x-1.5 text-green-500 text-xs mt-2.5">
-                <CheckCircle2 size={12} />
-                <span>{successMsg}</span>
-              </div>
-            )}
-            {errorMsg && (
-              <div className="flex items-center space-x-1.5 text-red-500 text-xs mt-2.5">
-                <AlertCircle size={12} />
-                <span>{errorMsg}</span>
-              </div>
-            )}
-          </div>
-          
-          <div className="text-xs text-muted leading-relaxed">
-            <span className="font-semibold text-foreground">Global HQ:</span> Suite 800, Tech Towers, New York, NY
-            <br />
-            <span className="font-semibold text-foreground">Inquiries:</span> contact@sooftcode.com
-          </div>
-        </div>
       </div>
 
-      {/* Copyright Bar */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 mt-12 pt-8 border-t border-card-border flex flex-col md:flex-row justify-between items-center text-xs text-muted">
-        <p>&copy; {new Date().getFullYear()} Sooftcode. All rights reserved.</p>
-        <div className="flex space-x-6 mt-4 md:mt-0">
-          <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
-          <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>
-          <Link href="/admin" className="hover:text-primary transition-colors font-semibold text-foreground">Admin Portal</Link>
-        </div>
-      </div>
-    </footer>
+      <FooterBackgroundGradient />
+    </motion.footer>
   );
 }

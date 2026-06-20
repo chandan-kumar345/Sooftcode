@@ -3,6 +3,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, Database, Terminal, Server } from 'lucide-react';
+import { GlowCard } from '@/components/ui/spotlight-card';
+
+const getGlowColorForTechCategory = (category: string) => {
+  if (category === 'frontend') return 'cyan';
+  if (category === 'backend') return 'green';
+  if (category === 'database') return 'yellow';
+  return 'violet';
+};
+
 
 interface TechItem {
   name: string;
@@ -201,12 +210,17 @@ export default function TechShowcase() {
                 className="grid grid-cols-1 md:grid-cols-2 gap-12"
               >
                 {techCategories[activeTab].items.map((tech, i) => (
-                  <div key={i} className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left space-y-6 sm:space-y-0 sm:space-x-8 p-6 rounded-2xl bg-card border border-card-border/40">
-                    <div className="flex-shrink-0 bg-background p-4 rounded-2xl border border-card-border flex items-center justify-center w-24 h-24">
+                  <GlowCard
+                    key={i}
+                    glowColor={getGlowColorForTechCategory(activeTab)}
+                    customSize={true}
+                    className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left space-y-6 sm:space-y-0 sm:space-x-8 p-6 border border-card-border/40"
+                  >
+                    <div className="flex-shrink-0 bg-background p-4 rounded-2xl border border-card-border flex items-center justify-center w-24 h-24 z-10">
                       {tech.svg}
                     </div>
                     
-                    <div className="space-y-3">
+                    <div className="space-y-3 z-10">
                       <div>
                         <h4 className="text-xl font-extrabold text-foreground">{tech.name}</h4>
                         <span className="text-xs text-primary font-medium tracking-wide">{tech.role}</span>
@@ -221,7 +235,7 @@ export default function TechShowcase() {
                         ))}
                       </div>
                     </div>
-                  </div>
+                  </GlowCard>
                 ))}
               </motion.div>
             </AnimatePresence>

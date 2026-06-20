@@ -20,7 +20,7 @@ const navLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -105,11 +105,11 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center space-x-4">
           {/* Theme Toggle Button */}
           <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
             className="p-3 rounded-xl border border-card-border hover:bg-card/80 text-foreground transition-colors cursor-pointer"
             aria-label="Toggle Theme"
           >
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            {resolvedTheme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </button>
 
           {/* Consultation CTA */}
@@ -124,11 +124,11 @@ export default function Navbar() {
         {/* Mobile Menu Actions */}
         <div className="flex items-center space-x-3 lg:hidden">
           <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
             className="p-2 rounded-lg border border-card-border text-foreground cursor-pointer"
             aria-label="Toggle Theme"
           >
-            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            {resolvedTheme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
           </button>
 
           <button

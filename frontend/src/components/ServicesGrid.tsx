@@ -4,6 +4,19 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FileCode, Globe, Smartphone, Layers, ShieldCheck, Cloud, Brain, ArrowRight } from 'lucide-react';
+import { GlowCard } from '@/components/ui/spotlight-card';
+
+const glowColorMapForServices = (colorStr: string) => {
+  if (colorStr.includes('blue') && !colorStr.includes('cyan')) return 'blue';
+  if (colorStr.includes('purple')) return 'pink';
+  if (colorStr.includes('green')) return 'green';
+  if (colorStr.includes('orange')) return 'orange';
+  if (colorStr.includes('yellow')) return 'yellow';
+  if (colorStr.includes('cyan')) return 'cyan';
+  if (colorStr.includes('violet')) return 'violet';
+  return 'blue' as const;
+};
+
 
 const services = [
   {
@@ -99,34 +112,39 @@ export default function ServicesGrid() {
             <motion.div
               key={index}
               variants={cardVariants}
-              whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="group p-8 rounded-3xl bg-card border border-card-border shadow-sm shadow-black/5 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col justify-between"
+              className="h-full flex"
             >
-              <div className="space-y-6">
-                {/* Icon box */}
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-tr ${service.color} flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform duration-300`}>
-                  <service.icon size={22} />
+              <GlowCard
+                glowColor={glowColorMapForServices(service.color)}
+                customSize={true}
+                className="group p-8 rounded-3xl flex flex-col justify-between w-full h-full border border-card-border/60"
+              >
+                <div className="space-y-6">
+                  {/* Icon box */}
+                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-tr ${service.color} flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform duration-300`}>
+                    <service.icon size={22} />
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                      {service.title}
+                    </h3>
+                    <p className="text-muted text-sm leading-relaxed">
+                      {service.description}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="space-y-3">
-                  <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-muted text-sm leading-relaxed">
-                    {service.description}
-                  </p>
+                <div className="pt-6 mt-6 border-t border-card-border/60">
+                  <Link
+                    href="/services"
+                    className="inline-flex items-center text-sm font-semibold text-primary hover:text-secondary space-x-1 transition-colors"
+                  >
+                    <span>Explore Service details</span>
+                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
-              </div>
-
-              <div className="pt-6 mt-6 border-t border-card-border/60">
-                <Link
-                  href="/services"
-                  className="inline-flex items-center text-sm font-semibold text-primary hover:text-secondary space-x-1 transition-colors"
-                >
-                  <span>Explore Service details</span>
-                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
+              </GlowCard>
             </motion.div>
           ))}
         </motion.div>

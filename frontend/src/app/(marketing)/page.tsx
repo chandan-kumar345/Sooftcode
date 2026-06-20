@@ -12,6 +12,16 @@ import StatsSection from '@/components/StatsSection';
 import Testimonials from '@/components/Testimonials';
 import ContactForm from '@/components/ContactForm';
 import { API_URL } from '@/context/AuthContext';
+import { GlowCard } from '@/components/ui/spotlight-card';
+
+const getGlowColorForProject = (category: string) => {
+  const cat = category.toLowerCase();
+  if (cat.includes('mobile')) return 'blue';
+  if (cat.includes('cloud')) return 'purple';
+  if (cat.includes('ai')) return 'orange';
+  return 'cyan';
+};
+
 
 // Safe local fallback projects if API is loading or offline
 const fallbackProjects = [
@@ -209,42 +219,48 @@ export default function HomePage() {
                 <motion.div
                   key={idx}
                   whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                  className="group rounded-3xl bg-background border border-card-border overflow-hidden shadow-sm flex flex-col justify-between"
+                  className="h-full flex"
                 >
-                  <div>
-                    {/* Visual Card Image */}
-                    <div className="h-48 relative overflow-hidden bg-muted">
-                      <img
-                        src={proj.image}
-                        alt={proj.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
-                      <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-background/95 backdrop-blur-sm text-[10px] font-bold text-primary border border-card-border">
-                        {proj.category}
+                  <GlowCard
+                    glowColor={getGlowColorForProject(proj.category)}
+                    customSize={true}
+                    className="group rounded-3xl overflow-hidden flex flex-col justify-between w-full h-full border border-card-border/60"
+                  >
+                    <div>
+                      {/* Visual Card Image */}
+                      <div className="h-48 relative overflow-hidden bg-muted">
+                        <img
+                          src={proj.image}
+                          alt={proj.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                        />
+                        <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-background/95 backdrop-blur-sm text-[10px] font-bold text-primary border border-card-border">
+                          {proj.category}
+                        </div>
+                      </div>
+
+                      <div className="p-6 space-y-3">
+                        <span className="text-[10px] font-semibold text-muted uppercase tracking-wider">Client: {proj.client}</span>
+                        <h4 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                          {proj.title}
+                        </h4>
+                        <p className="text-muted text-xs leading-relaxed line-clamp-3">
+                          {proj.description}
+                        </p>
                       </div>
                     </div>
 
-                    <div className="p-6 space-y-3">
-                      <span className="text-[10px] font-semibold text-muted uppercase tracking-wider">Client: {proj.client}</span>
-                      <h4 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
-                        {proj.title}
-                      </h4>
-                      <p className="text-muted text-xs leading-relaxed line-clamp-3">
-                        {proj.description}
-                      </p>
+                    <div className="p-6 pt-0 mt-4">
+                      <div className="flex flex-wrap gap-1.5 pt-4 border-t border-card-border/50">
+                        {proj.tags.slice(0, 3).map((t: string, ti: number) => (
+                          <span key={ti} className="px-2 py-0.5 rounded-lg bg-card text-foreground/80 border border-card-border/40 text-[9px] font-semibold">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="p-6 pt-0 mt-4">
-                    <div className="flex flex-wrap gap-1.5 pt-4 border-t border-card-border/50">
-                      {proj.tags.slice(0, 3).map((t: string, ti: number) => (
-                        <span key={ti} className="px-2 py-0.5 rounded-lg bg-card text-foreground/80 border border-card-border/40 text-[9px] font-semibold">
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                  </GlowCard>
                 </motion.div>
               ))
             )}

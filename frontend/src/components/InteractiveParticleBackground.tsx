@@ -95,12 +95,12 @@ export default function InteractiveParticleBackground() {
         this.baseX = this.x;
         this.baseY = this.y;
 
-        // Slow random float vectors
-        this.vx = (Math.random() - 0.5) * 0.3;
-        this.vy = (Math.random() - 0.5) * 0.3;
+        // Faster random float vectors for wider dispersion
+        this.vx = (Math.random() - 0.5) * 0.7;
+        this.vy = (Math.random() - 0.5) * 0.7;
 
-        // Size between 2px and 8px
-        this.size = Math.random() * 6 + 2;
+        // Size between 4px and 12px (larger dots)
+        this.size = Math.random() * 8 + 4;
 
         const colors = getThemeColors(currentTheme);
         this.color = colors[Math.floor(Math.random() * colors.length)];
@@ -135,8 +135,8 @@ export default function InteractiveParticleBackground() {
           if (distance < magneticRadius) {
             isHovered = true;
             const force = (magneticRadius - distance) / magneticRadius;
-            targetX += (dx / distance) * force * 55; // Pull towards mouse
-            targetY += (dy / distance) * force * 55;
+            targetX -= (dx / distance) * force * 75; // Push away from mouse (fala ker / spread out)
+            targetY -= (dy / distance) * force * 75;
           }
         }
 
@@ -189,12 +189,12 @@ export default function InteractiveParticleBackground() {
         this.x = x;
         this.y = y;
         
-        // Soft drift away vector
-        this.vx = (Math.random() - 0.5) * 1.5;
-        this.vy = (Math.random() - 0.5) * 1.5;
+        // Fast drift away vector (fala ker / spread out)
+        this.vx = (Math.random() - 0.5) * 3.5;
+        this.vy = (Math.random() - 0.5) * 3.5;
         
-        // Small trailing dot size
-        this.size = Math.random() * 4 + 2; // 2px to 6px
+        // Trail size between 3px and 9px (larger dots)
+        this.size = Math.random() * 6 + 3; // 2px to 6px
 
         const colors = getThemeColors(currentTheme);
         this.color = colors[Math.floor(Math.random() * colors.length)];
