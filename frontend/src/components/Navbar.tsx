@@ -7,6 +7,7 @@ import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, Menu, X, Code2 } from 'lucide-react';
 import BrandLogo from '@/components/BrandLogo';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 const navLinks = [
   { name: 'Home', path: '/' },
@@ -104,13 +105,7 @@ export default function Navbar() {
         {/* Utility Buttons */}
         <div className="hidden lg:flex items-center space-x-4">
           {/* Theme Toggle Button */}
-          <button
-            onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-            className="p-3 rounded-xl border border-card-border hover:bg-card/80 text-foreground transition-colors cursor-pointer"
-            aria-label="Toggle Theme"
-          >
-            {resolvedTheme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
+          <ThemeToggle />
 
           {/* Consultation CTA */}
           <Link
@@ -123,13 +118,7 @@ export default function Navbar() {
 
         {/* Mobile Menu Actions */}
         <div className="flex items-center space-x-3 lg:hidden">
-          <button
-            onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-            className="p-2 rounded-lg border border-card-border text-foreground cursor-pointer"
-            aria-label="Toggle Theme"
-          >
-            {resolvedTheme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
+          <ThemeToggle className="scale-90" />
 
           <button
             onClick={toggleMenu}

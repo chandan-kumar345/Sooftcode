@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useTheme } from 'next-themes';
+import { AuroraBackground } from '@/components/ui/aurora-background';
 
 interface MouseState {
   x: number | null;
@@ -293,6 +294,25 @@ export default function InteractiveParticleBackground() {
       mouse.px += (targetPx - mouse.px) * 0.05;
       mouse.py += (targetPy - mouse.py) * 0.05;
 
+      // Draw subtle grid background
+      const gridSize = 60;
+      ctx.strokeStyle = theme === 'light' ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.025)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+
+
+
       // 1. Draw glowing cursor trail backdrop
       if (mouse.active && mouse.x !== null && mouse.y !== null) {
         const trailRadius = 150;
@@ -321,47 +341,6 @@ export default function InteractiveParticleBackground() {
         }
       }
 
-      // Cache length for fast background particle iterations
-      const len = particles.length;
-      const hoverStates = new Array(len);
-
-      // 3. Update background particles
-      for (let i = 0; i < len; i++) {
-        hoverStates[i] = particles[i].update(mouse);
-      }
-
-      // 4. Draw inter-particle connection lines (linked to proximity)
-      const maxDistance = window.innerWidth < 640 ? 90 : 120;
-      ctx.save();
-      for (let i = 0; i < len; i++) {
-        for (let j = i + 1; j < len; j++) {
-          const p1 = particles[i];
-          const p2 = particles[j];
-
-          const dx = p1.x - p2.x;
-          const dy = p1.y - p2.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < maxDistance) {
-            const linkAlpha = (1 - distance / maxDistance) * (theme === 'light' ? 0.08 : 0.15);
-            ctx.strokeStyle = theme === 'light' 
-              ? `rgba(37, 99, 235, ${linkAlpha})` 
-              : `rgba(139, 92, 246, ${linkAlpha})`;
-            ctx.lineWidth = 0.8;
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
-          }
-        }
-      }
-      ctx.restore();
-
-      // 5. Draw individual background particles
-      for (let i = 0; i < len; i++) {
-        particles[i].draw(ctx, hoverStates[i]);
-      }
-
       animationFrameId = requestAnimationFrame(tick);
     };
 
@@ -377,6 +356,14 @@ export default function InteractiveParticleBackground() {
   }, [mounted, theme]);
 
   if (!mounted) return null;
+
+  if (theme === 'light') {
+    return (
+      <div className="pointer-events-none fixed inset-0 -z-20 w-full h-full overflow-hidden select-none bg-background transition-colors duration-300">
+        <AuroraBackground className="w-full h-full" showRadialGradient={true} />
+      </div>
+    );
+  }
 
   return (
     <div 

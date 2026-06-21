@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, ShieldCheck, Cpu, CloudLightning } from 'lucide-react';
 import Typewriter from '@/components/Typewriter';
+import { GridGlowBackground } from '@/components/ui/grid-glow-background';
 
 export default function Hero() {
   const containerVariants = {
@@ -32,13 +33,14 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-16 md:py-24">
-      {/* Background Glows */}
-
-      {/* Glow Circles */}
-      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] rounded-full glow-primary animate-pulse-slow z-0" />
-      <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full glow-accent animate-pulse-slow z-0" style={{ animationDelay: '3s' }} />
-
+    <GridGlowBackground
+      className="min-h-[90vh] py-16 md:py-24"
+      backgroundColor="transparent"
+      gridColor="rgba(255, 255, 255, 0.02)"
+      glowColors={["rgba(74, 0, 224, 0.25)", "rgba(142, 45, 226, 0.25)", "rgba(74, 0, 224, 0.15)"]}
+      glowCount={10}
+      gridSize={60}
+    >
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 w-full text-center">
         <motion.div
           variants={containerVariants}
@@ -118,6 +120,6 @@ export default function Hero() {
 
         </motion.div>
       </div>
-    </section>
+    </GridGlowBackground>
   );
 }

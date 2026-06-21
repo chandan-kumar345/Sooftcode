@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { AuthProvider } from "@/context/AuthContext";
 import MouseGlow from "@/components/MouseGlow";
 import InteractiveParticleBackground from "@/components/InteractiveParticleBackground";
+import IntroSplashScreen from "@/components/IntroSplashScreen";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,6 +49,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <IntroSplashScreen />
             <MouseGlow />
             <InteractiveParticleBackground />
             {children}

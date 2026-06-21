@@ -6,11 +6,11 @@
   --foreground: #0F172A; /* Slate-900 for absolute contrast */
   
   /* Brand colors (high contrast for legibility on white/light backgrounds) */
-  --primary: #4F46E5; /* Indigo 600 - rich & accessible (4.7:1 contrast) */
+  --primary: #4A00E0; /* Deep Indigo/Purple */
   --primary-foreground: #FFFFFF;
-  --secondary: #0E7490; /* Cyan 700 - deep electric blue-green (4.8:1 contrast) */
+  --secondary: #8E2DE2; /* Vibrant Violet */
   --secondary-foreground: #FFFFFF;
-  --accent: #A21CAF; /* Fuchsia 700 - rich magenta accent (5.2:1 contrast) */
+  --accent: #6D28D9; /* Rich purple */
   --accent-foreground: #FFFFFF;
   
   /* Cards & Sheets */
@@ -23,8 +23,8 @@
   --popover-foreground: #0F172A;
   
   /* Muted text & elements (ensuring standard readability) */
-  --muted: #475569; /* Slate 600 - passes AA text contrast */
-  --muted-foreground: #64748B; /* Slate 500 */
+  --muted: #1E293B; /* Slate 800 - high contrast readability */
+  --muted-foreground: #334155; /* Slate 700 - high accessibility contrast */
   
   /* Interactive inputs & borders */
   --border: #E2E8F0; /* Slate 200 */
@@ -38,22 +38,39 @@
   --destructive-foreground: #FFFFFF;
   
   /* Ambient glowing styles */
-  --accent-glow: rgba(162, 28, 175, 0.08);
-  --primary-glow: rgba(79, 70, 229, 0.08);
+  --accent-glow: rgba(142, 45, 226, 0.08);
+  --primary-glow: rgba(74, 0, 224, 0.08);
   --grid-color: rgba(15, 23, 42, 0.03);
   
+  /* Spotlight Card customization */
+  --card-lightness-border: 45;
+  --card-lightness-bg: 60;
+  --card-bg-spot-opacity: 0.2;
+  --card-border-spot-opacity: 1;
+  --border-brightness: 0.85;
+
   --radius: 0.625rem;
+
+  /* Aurora background color dependencies */
+  --white: #ffffff;
+  --black: #000000;
+  --transparent: transparent;
+  --blue-500: #3b82f6;
+  --indigo-300: #a5b4fc;
+  --blue-300: #93c5fd;
+  --violet-200: #ddd6fe;
+  --blue-400: #60a5fa;
 }
 
 .dark {
-  --background: #030712; /* Deep space black */
+  --background: #000000; /* Absolute pitch black */
   --foreground: #F8FAFC;
   
   --primary: #8B5CF6; /* High-vibrancy violet-500 */
   --primary-foreground: #FFFFFF;
-  --secondary: #06B6D4; /* Electric cyan-500 */
-  --secondary-foreground: #0F172A;
-  --accent: #D946EF; /* Neon magenta-500 */
+  --secondary: #8E2DE2; /* Vibrant Violet/Indigo */
+  --secondary-foreground: #FFFFFF;
+  --accent: #C084FC; /* Light Violet/Magenta */
   --accent-foreground: #FFFFFF;
   
   --card: rgba(10, 15, 30, 0.45); /* Sleek glassmorphic card bg */
@@ -63,8 +80,8 @@
   --popover: #090D1A;
   --popover-foreground: #F8FAFC;
   
-  --muted: #94A3B8; /* Slate-400 */
-  --muted-foreground: #64748B; /* Slate-500 */
+  --muted: #E2E8F0; /* Slate 200 - high readability in dark mode */
+  --muted-foreground: #94A3B8; /* Slate 400 - high contrast dark mode text */
   
   --border: rgba(255, 255, 255, 0.1);
   --input: rgba(255, 255, 255, 0.1);
@@ -75,9 +92,26 @@
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
   
-  --accent-glow: rgba(217, 70, 239, 0.15);
+  --accent-glow: rgba(192, 132, 252, 0.15);
   --primary-glow: rgba(139, 92, 246, 0.15);
   --grid-color: rgba(255, 255, 255, 0.02);
+
+  /* Spotlight Card customization */
+  --card-lightness-border: 65;
+  --card-lightness-bg: 70;
+  --card-bg-spot-opacity: 0.12;
+  --card-border-spot-opacity: 1;
+  --border-brightness: 1.8;
+
+  /* Aurora background color dependencies */
+  --white: #ffffff;
+  --black: #000000;
+  --transparent: transparent;
+  --blue-500: #3b82f6;
+  --indigo-300: #a5b4fc;
+  --blue-300: #93c5fd;
+  --violet-200: #ddd6fe;
+  --blue-400: #60a5fa;
 }
 
 @theme {
@@ -105,6 +139,17 @@
   --color-input-border: var(--input-border);
   --font-sans: var(--font-geist-sans), sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
+
+  --animate-aurora: aurora 60s linear infinite;
+
+  @keyframes aurora {
+    from {
+      background-position: 50% 50%, 50% 50%;
+    }
+    to {
+      background-position: 350% 50%, 350% 50%;
+    }
+  }
 }
 
 /* Liquid reflecting button effect */
@@ -115,6 +160,7 @@
   background-size: 200% 200%;
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
+  box-shadow: 0 0 6px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3px rgba(255,255,255,0.25), inset -3px -3px 0.5px -3px rgba(255,255,255,0.15);
 }
 
 .btn-liquid:hover {
@@ -158,6 +204,7 @@
   border-radius: 9999px !important; /* Semi-circle rounded pill style */
   color: var(--foreground);
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 6px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3px rgba(255,255,255,0.25), inset -3px -3px 0.5px -3px rgba(255,255,255,0.15);
 }
 
 .dark .btn-liquid-secondary {
@@ -212,6 +259,7 @@
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
   border-radius: 9999px !important;
+  box-shadow: 0 0 6px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3px rgba(255,255,255,0.35), inset -3px -3px 0.5px -3px rgba(255,255,255,0.2);
 }
 
 .btn-liquid-nav:hover {
@@ -322,4 +370,70 @@ body {
 
 .animate-pulse-slow {
   animation: pulse-slow 8s ease-in-out infinite;
+}
+
+/* Glass Button Styles */
+.glass-button-wrap {
+  position: relative;
+  display: inline-block;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-button-wrap:hover {
+  transform: translateY(-2px);
+}
+
+.glass-button {
+  all: unset;
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.2), 
+    inset 0 1px 1px rgba(255, 255, 255, 0.2),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 10px 40px rgba(139, 92, 246, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.glass-button:active {
+  transform: scale(0.97);
+}
+
+.glass-button-text {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.glass-button-shadow {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(15px);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-button-wrap:hover .glass-button-shadow {
+  opacity: 1;
 }

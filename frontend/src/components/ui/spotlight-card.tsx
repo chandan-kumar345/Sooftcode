@@ -85,7 +85,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
         var(--spotlight-size) var(--spotlight-size) at
         calc(var(--x, 0) * 1px)
         calc(var(--y, 0) * 1px),
-        hsl(var(--hue, 210) calc(var(--saturation, 100) * 1%) calc(var(--lightness, 70) * 1%) / var(--bg-spot-opacity, 0.12)), transparent
+        hsl(var(--hue, 210) calc(var(--saturation, 100) * 1%) calc(var(--card-lightness-bg, 70) * 1%) / var(--card-bg-spot-opacity, 0.12)), transparent
       )`,
       backgroundColor: 'var(--backdrop, transparent)',
       backgroundSize: 'calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)))',
@@ -130,9 +130,9 @@ const GlowCard: React.FC<GlowCardProps> = ({
         calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at
         calc(var(--x, 0) * 1px)
         calc(var(--y, 0) * 1px),
-        hsl(var(--hue, 210) calc(var(--saturation, 100) * 1%) calc(var(--lightness, 65) * 1%) / var(--border-spot-opacity, 1)), transparent 100%
+        hsl(var(--hue, 210) calc(var(--saturation, 100) * 1%) calc(var(--card-lightness-border, 65) * 1%) / var(--card-border-spot-opacity, 1)), transparent 100%
       );
-      filter: brightness(1.8);
+      filter: brightness(var(--border-brightness, 1.8));
     }
     
     [data-glow]::after {

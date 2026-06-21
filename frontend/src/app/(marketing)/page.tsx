@@ -218,7 +218,6 @@ export default function HomePage() {
               projects.map((proj, idx) => (
                 <motion.div
                   key={idx}
-                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
                   className="h-full flex"
                 >
                   <GlowCard
