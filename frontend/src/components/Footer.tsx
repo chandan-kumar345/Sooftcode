@@ -269,27 +269,35 @@ export default function Footer() {
           </div>
         </div>
         
-        {/* Giant Sooftcode text with scroll reveal animation */}
-        <motion.div 
-          className="w-full flex justify-center select-none mt-16 mb-4 overflow-hidden"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.15 }}
-        >
-          <h2 className="text-[9.5vw] lg:text-[110px] xl:text-[130px] font-black tracking-tighter leading-none text-center text-foreground dark:text-white flex flex-nowrap">
-            {letters.map((char, index) => (
-              <motion.span
-                key={index}
-                variants={letterVariants}
-                className="inline-block"
-              >
-                {char}
-              </motion.span>
-            ))}
-          </h2>
-        </motion.div>
+      </div>
 
+      {/* Giant Sooftcode text with scroll reveal animation - OUTSIDE the max-w container to be full width of screen */}
+      <motion.div 
+        className="w-full flex justify-center select-none my-12 overflow-hidden z-10 relative"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.15 }}
+      >
+        <h2 className="text-[17.5vw] font-black tracking-tighter leading-none text-center text-foreground dark:text-white flex flex-nowrap select-none">
+          {letters.map((char, index) => (
+            <motion.span
+              key={index}
+              variants={letterVariants}
+              whileHover={{ 
+                scale: 1.25, 
+                y: -15, 
+                transition: { type: "spring", stiffness: 500, damping: 15 } 
+              }}
+              className="inline-block cursor-default text-foreground dark:text-white hover:text-[#06b6d4] hover:drop-shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-[color,filter] duration-200"
+            >
+              {char}
+            </motion.span>
+          ))}
+        </h2>
+      </motion.div>
+
+      <div className="max-w-7xl mx-auto px-6 md:px-12 z-10 relative">
         <hr className="border-t border-card-border/60 my-6" />
 
         {/* Footer bottom */}

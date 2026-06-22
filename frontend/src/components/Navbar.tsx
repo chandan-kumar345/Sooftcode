@@ -7,7 +7,7 @@ import { useTheme } from 'next-themes';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, Menu, X, Code2 } from 'lucide-react';
 import BrandLogo from '@/components/BrandLogo';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
+import Switch from '@/components/ui/sky-toggle';
 
 const navLinks = [
   { name: 'Home', path: '/' },
@@ -119,11 +119,11 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center space-x-4">
           {/* Theme Toggle Button */}
           <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 400, damping: 15 }}
           >
-            <ThemeToggle />
+            <Switch size="13px" />
           </motion.div>
 
           {/* Consultation CTA */}
@@ -143,7 +143,7 @@ export default function Navbar() {
 
         {/* Mobile Menu Actions */}
         <div className="flex items-center space-x-3 lg:hidden">
-          <ThemeToggle className="scale-90" />
+          <Switch size="12px" />
 
           <button
             onClick={toggleMenu}

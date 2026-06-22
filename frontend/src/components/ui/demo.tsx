@@ -1,13 +1,7 @@
-import { ThemeToggle } from "@/components/ui/theme-toggle"
+"use client";
 
-function DefaultToggle() {
-  return (
-    <div className="space-y-2 text-center">
-      <div className="flex justify-center">
-        <ThemeToggle />
-      </div>
-    </div>
-  )
+import Switch from "@/components/ui/sky-toggle";
+
+export default function DemoOne() {
+  return <Switch />;
 }
-
-export { DefaultToggle }
