@@ -94,6 +94,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
       border: 'var(--border-size) solid var(--backup-border)',
       position: 'relative' as const,
       touchAction: 'none' as const,
+      boxShadow: 'var(--card-shadow)',
     };
 
     // Add width and height if provided
@@ -174,7 +175,6 @@ const GlowCard: React.FC<GlowCardProps> = ({
           ${getSizeClasses()}
           rounded-3xl 
           relative 
-          shadow-[0_1rem_2rem_-1rem_black] 
           backdrop-blur-[5px]
           transition-all
           duration-300

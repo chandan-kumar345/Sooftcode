@@ -107,7 +107,12 @@ export const GridGlowBackground: React.FC<GridGlowBackgroundProps> = ({
     };
 
     const drawGrid = () => {
-      ctx.strokeStyle = gridColor;
+      let strokeColor = gridColor;
+      if (gridColor && gridColor.startsWith('var(')) {
+        const cssVarName = gridColor.replace(/^var\((--[a-zA-Z0-9-]+)\)$/, '$1').trim();
+        strokeColor = getComputedStyle(document.documentElement).getPropertyValue(cssVarName).trim();
+      }
+      ctx.strokeStyle = strokeColor || 'rgba(15, 23, 42, 0.03)';
       ctx.lineWidth = 1;
       for (let x = 0; x < canvas.width; x += gridSize) {
         ctx.beginPath();

@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useTheme } from 'next-themes';
-import { AuroraBackground } from '@/components/ui/aurora-background';
 
 interface MouseState {
   x: number | null;
@@ -21,7 +20,7 @@ interface MouseState {
 export default function InteractiveParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Avoid hydration mismatch by waiting for client-side mount
@@ -248,7 +247,7 @@ export default function InteractiveParticleBackground() {
 
       particles = [];
       for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle(canvas, theme));
+        particles.push(new Particle(canvas, resolvedTheme));
       }
     };
 
@@ -262,10 +261,10 @@ export default function InteractiveParticleBackground() {
       mouse.active = true;
 
       // Spawn trailing dots that follow mouse movement
-      trailParticles.push(new TrailParticle(e.clientX, e.clientY, theme));
+      trailParticles.push(new TrailParticle(e.clientX, e.clientY, resolvedTheme));
       // Extra dot for richer trail on faster movements
       if (Math.random() < 0.5) {
-        trailParticles.push(new TrailParticle(e.clientX + (Math.random() - 0.5) * 8, e.clientY + (Math.random() - 0.5) * 8, theme));
+        trailParticles.push(new TrailParticle(e.clientX + (Math.random() - 0.5) * 8, e.clientY + (Math.random() - 0.5) * 8, resolvedTheme));
       }
 
       // Parallax center tracking
@@ -296,7 +295,7 @@ export default function InteractiveParticleBackground() {
 
       // Draw subtle grid background
       const gridSize = 60;
-      ctx.strokeStyle = theme === 'light' ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.025)';
+      ctx.strokeStyle = resolvedTheme === 'light' ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.025)';
       ctx.lineWidth = 1;
       for (let x = 0; x < canvas.width; x += gridSize) {
         ctx.beginPath();
@@ -320,7 +319,7 @@ export default function InteractiveParticleBackground() {
           mouse.x, mouse.y, 0,
           mouse.x, mouse.y, trailRadius
         );
-        const colorStop = theme === 'light' ? 'rgba(99, 102, 241, 0.05)' : 'rgba(139, 92, 246, 0.08)';
+        const colorStop = resolvedTheme === 'light' ? 'rgba(99, 102, 241, 0.05)' : 'rgba(139, 92, 246, 0.08)';
         trailGlow.addColorStop(0, colorStop);
         trailGlow.addColorStop(1, 'rgba(0,0,0,0)');
 
@@ -353,17 +352,9 @@ export default function InteractiveParticleBackground() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [mounted, theme]);
+  }, [mounted, resolvedTheme]);
 
   if (!mounted) return null;
-
-  if (theme === 'light') {
-    return (
-      <div className="pointer-events-none fixed inset-0 -z-20 w-full h-full overflow-hidden select-none bg-background transition-colors duration-300">
-        <AuroraBackground className="w-full h-full" showRadialGradient={true} />
-      </div>
-    );
-  }
 
   return (
     <div 

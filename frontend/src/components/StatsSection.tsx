@@ -101,7 +101,7 @@ export default function StatsSection() {
           {statsItems.map((stat, i) => (
             <div
               key={i}
-              className="flex flex-col items-center p-8 rounded-3xl bg-card/40 border border-card-border/60 backdrop-blur-sm shadow-sm"
+              className="flex flex-col items-center p-8 rounded-3xl bg-card/90 dark:bg-card/40 border border-card-border/60 backdrop-blur-sm shadow-sm"
             >
               {/* Icon */}
               <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6">

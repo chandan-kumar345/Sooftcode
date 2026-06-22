@@ -36,7 +36,7 @@ export default function Hero() {
     <GridGlowBackground
       className="min-h-[90vh] py-16 md:py-24"
       backgroundColor="transparent"
-      gridColor="rgba(255, 255, 255, 0.02)"
+      gridColor="var(--grid-color)"
       glowColors={["rgba(74, 0, 224, 0.25)", "rgba(142, 45, 226, 0.25)", "rgba(74, 0, 224, 0.15)"]}
       glowCount={10}
       gridSize={60}
