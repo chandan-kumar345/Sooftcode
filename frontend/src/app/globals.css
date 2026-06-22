@@ -16,8 +16,8 @@
   /* Cards & Sheets */
   --card: #FFFFFF;
   --card-foreground: #0F172A;
-  --card-border: rgba(15, 23, 42, 0.06); /* Fine, crisp border */
-  --card-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08), 0 1px 3px -1px rgba(15, 23, 42, 0.03);
+  --card-border: rgba(15, 23, 42, 0.08); /* Crisp, high-contrast light border */
+  --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 16px -6px rgba(15, 23, 42, 0.04);
   
   /* Popovers */
   --popover: #FFFFFF;
@@ -74,10 +74,10 @@
   --accent: #C084FC; /* Light Violet/Magenta */
   --accent-foreground: #FFFFFF;
   
-  --card: rgba(10, 15, 30, 0.45); /* Sleek glassmorphic card bg */
+  --card: rgba(13, 20, 38, 0.65); /* Richer glassmorphic dark-navy card bg */
   --card-foreground: #F8FAFC;
-  --card-border: rgba(255, 255, 255, 0.06);
-  --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+  --card-border: rgba(139, 92, 246, 0.15); /* Premium violet accent glowing border */
+  --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
   
   --popover: #090D1A;
   --popover-foreground: #F8FAFC;
@@ -201,29 +201,19 @@
 .btn-liquid-secondary {
   position: relative;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: 9999px !important; /* Semi-circle rounded pill style */
   color: var(--foreground);
   transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 6px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.08), inset 3px 3px 0.5px -3px rgba(255,255,255,0.25), inset -3px -3px 0.5px -3px rgba(255,255,255,0.15);
-}
-
-.dark .btn-liquid-secondary {
-  background: rgba(19, 27, 46, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--card-shadow);
 }
 
 .btn-liquid-secondary:hover {
   border-color: var(--primary);
   box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
   transform: translateY(-2px) scale(1.01);
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.dark .btn-liquid-secondary:hover {
-  background: rgba(19, 27, 46, 0.6);
-  border-color: var(--primary);
+  background: var(--background);
 }
 
 .btn-liquid-secondary:active {
@@ -301,6 +291,8 @@
 html {
   scroll-behavior: smooth;
   height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -311,6 +303,8 @@ body {
   color: var(--foreground);
   transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-image 0.3s ease, background-image 0.3s ease;
   min-height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .dark body {

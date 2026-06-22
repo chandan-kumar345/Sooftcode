@@ -54,9 +54,15 @@ export default function Navbar() {
       }`}>
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
         {/* Logo */}
-        <Link href="/">
-          <BrandLogo />
-        </Link>
+        <motion.div
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+        >
+          <Link href="/">
+            <BrandLogo />
+          </Link>
+        </motion.div>
 
         {/* Desktop Navigation Links */}
         <div className="hidden lg:flex items-center space-x-1.5 bg-foreground/[0.03] dark:bg-white/[0.02] border border-card-border/40 p-1.5 rounded-full backdrop-blur-md">
@@ -64,40 +70,47 @@ export default function Navbar() {
             const isActive = pathname === link.path || (link.path !== '/' && pathname.startsWith(link.path));
             const isHovered = hoveredPath === link.path;
             return (
-              <Link
+              <motion.div
                 key={link.path}
-                href={link.path}
-                onMouseEnter={() => setHoveredPath(link.path)}
-                onMouseLeave={() => setHoveredPath(null)}
-                className={`relative px-5 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200 z-10`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                className="relative"
               >
-                <span className={`transition-colors duration-200 ${isActive
-                  ? 'text-white font-extrabold'
-                  : isHovered
-                    ? 'text-primary font-extrabold drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]'
-                    : 'text-muted-foreground'
-                  }`}>
-                  {link.name}
-                </span>
+                <Link
+                  href={link.path}
+                  onMouseEnter={() => setHoveredPath(link.path)}
+                  onMouseLeave={() => setHoveredPath(null)}
+                  className={`relative block px-5 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200 z-10`}
+                >
+                  <span className={`transition-colors duration-200 ${isActive
+                    ? 'text-white font-extrabold'
+                    : isHovered
+                      ? 'text-primary font-extrabold drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]'
+                      : 'text-muted-foreground'
+                    }`}>
+                    {link.name}
+                  </span>
 
-                {/* Active capsule background */}
-                {isActive && (
-                  <motion.span
-                    layoutId="activeNavTab"
-                    className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full -z-10 shadow-md shadow-primary/25"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
+                  {/* Active capsule background */}
+                  {isActive && (
+                    <motion.span
+                      layoutId="activeNavTab"
+                      className="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-full -z-10 shadow-md shadow-primary/25"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
 
-                {/* Hover capsule background (sliding highlight) */}
-                {isHovered && !isActive && (
-                  <motion.span
-                    layoutId="hoverNavTab"
-                    className="absolute inset-0 bg-primary/10 border border-primary/20 dark:bg-primary/20 dark:border-primary/30 rounded-full -z-10 shadow-sm shadow-primary/10"
-                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </Link>
+                  {/* Hover capsule background (sliding highlight) */}
+                  {isHovered && !isActive && (
+                    <motion.span
+                      layoutId="hoverNavTab"
+                      className="absolute inset-0 bg-primary/10 border border-primary/20 dark:bg-primary/20 dark:border-primary/30 rounded-full -z-10 shadow-sm shadow-primary/10"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              </motion.div>
             );
           })}
         </div>
@@ -105,15 +118,27 @@ export default function Navbar() {
         {/* Utility Buttons */}
         <div className="hidden lg:flex items-center space-x-4">
           {/* Theme Toggle Button */}
-          <ThemeToggle />
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+          >
+            <ThemeToggle />
+          </motion.div>
 
           {/* Consultation CTA */}
-          <Link
-            href="/contact?type=consultation"
-            className="inline-flex items-center justify-center px-10 py-3.5 rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 text-white font-extrabold shadow-xl shadow-cyan-500/30 border border-white/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-cyan-400/50"
+          <motion.div
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
           >
-            Let's Talk
-          </Link>
+            <Link
+              href="/contact?type=consultation"
+              className="inline-flex items-center justify-center px-10 py-3.5 rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 text-white font-extrabold shadow-xl shadow-cyan-500/30 border border-white/20 backdrop-blur-sm transition-all duration-300 hover:shadow-cyan-400/50"
+            >
+              Let's Talk
+            </Link>
+          </motion.div>
         </div>
 
         {/* Mobile Menu Actions */}

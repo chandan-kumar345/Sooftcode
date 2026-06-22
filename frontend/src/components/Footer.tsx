@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { API_URL } from '@/context/AuthContext';
 import BrandLogo from '@/components/BrandLogo';
-import { FooterBackgroundGradient, TextHoverEffect } from '@/components/ui/hover-footer';
+import { FooterBackgroundGradient } from '@/components/ui/hover-footer';
 
 // Custom inline SVGs for brand icons since they are removed from modern lucide-react versions
 const FacebookIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -52,6 +52,34 @@ const DribbbleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 interface NewsletterForm {
   email: string;
 }
+
+const letters = "Sooftcode".split("");
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.03,
+    }
+  }
+};
+
+const letterVariants = {
+  hidden: {
+    opacity: 0,
+    y: 100,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 70,
+      damping: 15,
+      mass: 0.8
+    }
+  }
+};
 
 export default function Footer() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm<NewsletterForm>();
@@ -241,10 +269,26 @@ export default function Footer() {
           </div>
         </div>
         
-        {/* SVG Text hover effect */}
-        <div className="lg:flex hidden h-[18rem] relative select-none mt-8 mb-4">
-          <TextHoverEffect text="SOOFTCODE" className="z-10" />
-        </div>
+        {/* Giant Sooftcode text with scroll reveal animation */}
+        <motion.div 
+          className="w-full flex justify-center select-none mt-16 mb-4 overflow-hidden"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.15 }}
+        >
+          <h2 className="text-[9.5vw] lg:text-[110px] xl:text-[130px] font-black tracking-tighter leading-none text-center text-foreground dark:text-white flex flex-nowrap">
+            {letters.map((char, index) => (
+              <motion.span
+                key={index}
+                variants={letterVariants}
+                className="inline-block"
+              >
+                {char}
+              </motion.span>
+            ))}
+          </h2>
+        </motion.div>
 
         <hr className="border-t border-card-border/60 my-6" />
 
