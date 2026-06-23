@@ -2,101 +2,43 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, FolderOpen, ExternalLink, Calendar, Briefcase, Award, X, Sparkles, Check } from 'lucide-react';
+import { Search, FolderOpen, ExternalLink, Calendar, Briefcase, Award, X, Sparkles, Check, ArrowRight } from 'lucide-react';
 import { API_URL } from '@/context/AuthContext';
+import { projects as fallbackProjects } from '@/data/projects';
+import { GlowCard } from '@/components/ui/spotlight-card';
 
-// Safe static fallback projects
-const fallbackProjects = [
-  {
-    _id: '1',
-    title: 'Aura Capital Trading Portal',
-    client: 'Aura Capital Group',
-    category: 'Mobile App Development',
-    duration: '6 Months',
-    description: 'A premium, high-frequency stock trading and portfolio optimization application featuring sub-millisecond sync, interactive visualization graphs, and custom biometric security.',
-    tags: ['React Native', 'Node.js', 'MongoDB', 'AWS', 'WebSockets'],
-    image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=800&q=80',
-    link: 'https://auracapital.example.com',
-    features: [
-      'Real-time price feeds via socket connections',
-      'Biometric authentication (FaceID / TouchID)',
-      'AI-driven custom portfolio optimization suggestions',
-      'High-performance SVG and canvas-based financial charts',
-    ],
-    stats: {
-      'Latency Sync': '< 10ms',
-      'Active Users': '500K+',
-      'App Store Rating': '4.9/5',
-    },
-  },
-  {
-    _id: '2',
-    title: 'Enterprise DevSecOps Pipeline',
-    client: 'Nova Logistics Global',
-    category: 'Cloud Solutions',
-    duration: '8 Months',
-    description: 'Architected a multi-region, highly available, and auto-scaling Kubernetes cluster infrastructure incorporating automated CI/CD security scanning and Canary deployments.',
-    tags: ['AWS', 'Docker', 'Kubernetes', 'Terraform', 'GitHub Actions'],
-    image: 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=800&q=80',
-    link: 'https://novalogistics.example.com',
-    features: [
-      'Automated static security analysis (SAST) in CI/CD pipeline',
-      'Multi-region cluster fallback redundancy',
-      'Canary deployment strategy with automated rollbacks',
-      'Saved 50% on client cloud-hosting bills via server rightsizing',
-    ],
-    stats: {
-      'Deployment Time': '-75%',
-      'System Uptime': '99.99%',
-      'Annual Savings': '$240k',
-    },
-  },
-  {
-    _id: '3',
-    title: 'Zenith AI Customer Intelligence',
-    client: 'Zenith Retail',
-    category: 'AI Solutions',
-    duration: '4 Months',
-    description: 'Designed an intelligent analytics engine that parses client interactions across web-chat, voice transcripts, and emails using Large Language Models to deliver automated sentiment tracking and support ticket triage.',
-    tags: ['Python', 'FastAPI', 'Next.js', 'OpenAI', 'MongoDB', 'LangChain'],
-    image: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=800&q=80',
-    link: 'https://zenithanalytics.example.com',
-    features: [
-      'Real-time conversational sentiment classification',
-      'Intelligent routing based on critical keywords and panic states',
-      'Auto-generated support response suggestions',
-      'GDPR-compliant personal data hashing pipeline',
-    ],
-    stats: {
-      'Support Efficiency': '+35%',
-      'Classification Accuracy': '94.2%',
-      'CSAT Score Boost': '+15%',
-    },
-  },
-  {
-    _id: '4',
-    title: 'Velo CRM SaaS Platform',
-    client: 'Velo Technologies',
-    category: 'SaaS Development',
-    duration: '5 Months',
-    description: 'A modern, comprehensive multi-tenant SaaS Customer Relationship Manager built with Next.js, featuring customizable widget dashboards, Stripe payment systems, and role-based permissions.',
-    tags: ['Next.js', 'Express', 'TypeScript', 'Tailwind CSS', 'Stripe', 'Node.js'],
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
-    link: 'https://velocrm.example.com',
-    features: [
-      'Multi-tenant database isolation using Mongoose schemas',
-      'Stripe subscription portals with automatic invoice generators',
-      'Draggable dashboard widgets for user personalization',
-      'Full REST API credentials panel for external developer integration',
-    ],
-    stats: {
-      'Onboarding Time': '< 3 min',
-      'Monthly SaaS Revenue': '$85k',
-      'Load Time': '0.9 seconds',
-    },
-  },
-];
+interface GithubIconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number | string;
+}
+
+const Github = ({ size = 16, ...props }: GithubIconProps) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    width={size} 
+    height={size} 
+    className="inline-block" 
+    {...props}
+  >
+    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+    <path d="M9 18c-4.51 2-5-2-7-3" />
+  </svg>
+);
+
+const getGlowColorForProject = (category: string) => {
+  const cat = category.toLowerCase();
+  if (cat.includes('mobile')) return 'blue';
+  if (cat.includes('cloud')) return 'purple';
+  if (cat.includes('ai') || cat.includes('intelligence')) return 'orange';
+  if (cat.includes('saas')) return 'pink';
+  return 'cyan';
+};
 
 const categories = [
   'All',
@@ -109,8 +51,8 @@ const categories = [
 ];
 
 export default function PortfolioPage() {
-  const [projects, setProjects] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState<any[]>(fallbackProjects);
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
@@ -120,7 +62,29 @@ export default function PortfolioPage() {
       try {
         const response = await axios.get(`${API_URL}/projects`);
         if (response.data?.success && response.data?.data?.length > 0) {
-          setProjects(response.data.data);
+          const merged = [...fallbackProjects];
+          response.data.data.forEach((apiProj: any) => {
+            const index = merged.findIndex(localProj => localProj.title.toLowerCase() === apiProj.title.toLowerCase());
+            if (index !== -1) {
+              merged[index] = {
+                ...merged[index],
+                ...apiProj,
+                slug: merged[index].slug,
+                id: apiProj._id,
+                _id: apiProj._id,
+                github: merged[index].github,
+                displayCategory: merged[index].displayCategory || merged[index].category,
+              };
+            } else {
+              merged.push({
+                ...apiProj,
+                id: apiProj._id,
+                _id: apiProj._id,
+                slug: apiProj.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
+              });
+            }
+          });
+          setProjects(merged);
         } else {
           setProjects(fallbackProjects);
         }
@@ -226,42 +190,76 @@ export default function PortfolioPage() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.2 }}
                   onClick={() => setSelectedProject(proj)}
-                  className="group rounded-3xl bg-card border border-card-border overflow-hidden shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col justify-between cursor-pointer"
+                  className="cursor-pointer h-full flex"
                 >
-                  <div>
-                    {/* Cover Image */}
-                    <div className="h-48 relative overflow-hidden bg-muted">
-                      <img
-                        src={proj.image}
-                        alt={proj.title}
-                        className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
-                        loading="lazy"
-                      />
-                      <div className="absolute top-4 left-4 px-2.5 py-1 rounded-full bg-background/90 backdrop-blur-sm text-[9px] font-bold text-primary border border-card-border">
-                        {proj.category}
+                  <GlowCard
+                    glowColor={getGlowColorForProject(proj.category)}
+                    customSize={true}
+                    className="group rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col justify-between w-full h-full border border-card-border/60"
+                  >
+                    <div className="flex-grow flex flex-col justify-between h-full">
+                      <div>
+                        {/* Cover Image */}
+                        <div className="h-48 relative overflow-hidden bg-muted">
+                          <img
+                            src={proj.image}
+                            alt={proj.title}
+                            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                            loading="lazy"
+                          />
+                          <div className="absolute top-4 left-4 px-2.5 py-1 rounded-full bg-background/90 backdrop-blur-sm text-[9px] font-bold text-primary border border-card-border">
+                            {proj.category}
+                          </div>
+                        </div>
+
+                        <div className="p-6 space-y-2">
+                          <span className="text-[9px] font-bold text-muted uppercase tracking-wider">Client: {proj.client}</span>
+                          <h3 className="text-lg font-extrabold text-foreground group-hover:text-primary transition-colors">
+                            {proj.title}
+                          </h3>
+                          <p className="text-muted text-xs leading-relaxed line-clamp-3">
+                            {proj.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="p-6 pt-0 mt-4 space-y-4">
+                        <div className="flex flex-wrap gap-1.5 pt-4 border-t border-card-border/50">
+                          {proj.tags.slice(0, 4).map((tag: string) => (
+                            <span key={tag} className="px-2 py-0.5 rounded-lg bg-background text-foreground/80 border border-card-border/50 text-[9px] font-semibold">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center justify-between gap-3 pt-2">
+                          {proj.github ? (
+                            <a
+                              href={proj.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="p-2 rounded-xl bg-background border border-card-border hover:border-primary text-muted hover:text-primary transition-all flex items-center justify-center cursor-pointer"
+                              title="GitHub Code"
+                            >
+                              <Github size={16} />
+                            </a>
+                          ) : (
+                            <div className="w-9 h-9" />
+                          )}
+
+                          <Link
+                            href={`/projects/${proj.slug}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="px-4 py-2 rounded-xl btn-liquid-secondary text-foreground text-xs font-bold flex items-center space-x-1 transition-all cursor-pointer"
+                          >
+                            <span>View Details</span>
+                            <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                          </Link>
+                        </div>
                       </div>
                     </div>
-
-                    <div className="p-6 space-y-2">
-                      <span className="text-[9px] font-bold text-muted uppercase tracking-wider">Client: {proj.client}</span>
-                      <h3 className="text-lg font-extrabold text-foreground group-hover:text-primary transition-colors">
-                        {proj.title}
-                      </h3>
-                      <p className="text-muted text-xs leading-relaxed line-clamp-3">
-                        {proj.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-6 pt-0 mt-4">
-                    <div className="flex flex-wrap gap-1.5 pt-4 border-t border-card-border/50">
-                      {proj.tags.slice(0, 4).map((tag: string) => (
-                        <span key={tag} className="px-2 py-0.5 rounded-lg bg-background text-foreground/80 border border-card-border/50 text-[9px] font-semibold">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                  </GlowCard>
                 </motion.div>
               ))}
             </AnimatePresence>

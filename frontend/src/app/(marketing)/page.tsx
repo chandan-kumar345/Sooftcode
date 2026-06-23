@@ -9,65 +9,73 @@ import Hero from '@/components/Hero';
 import ServicesGrid from '@/components/ServicesGrid';
 import TechShowcase from '@/components/TechShowcase';
 import StatsSection from '@/components/StatsSection';
+
+interface GithubIconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number | string;
+}
+
+const Github = ({ size = 16, ...props }: GithubIconProps) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    width={size} 
+    height={size} 
+    className="inline-block" 
+    {...props}
+  >
+    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+    <path d="M9 18c-4.51 2-5-2-7-3" />
+  </svg>
+);
 import Testimonials from '@/components/Testimonials';
 import ContactForm from '@/components/ContactForm';
 import { API_URL } from '@/context/AuthContext';
 import { GlowCard } from '@/components/ui/spotlight-card';
+import { projects as fallbackProjects } from '@/data/projects';
 
 const getGlowColorForProject = (category: string) => {
   const cat = category.toLowerCase();
   if (cat.includes('mobile')) return 'blue';
   if (cat.includes('cloud')) return 'purple';
-  if (cat.includes('ai')) return 'orange';
+  if (cat.includes('ai') || cat.includes('intelligence')) return 'orange';
   return 'cyan';
 };
 
-
-// Safe local fallback projects if API is loading or offline
-const fallbackProjects = [
-  {
-    title: 'Aura Capital Trading Portal',
-    client: 'Aura Capital Group',
-    category: 'Mobile App Development',
-    description: 'A premium, high-frequency stock trading and portfolio optimization application featuring sub-millisecond sync.',
-    tags: ['React Native', 'Node.js', 'MongoDB', 'AWS', 'WebSockets'],
-    image: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    title: 'Enterprise DevSecOps Pipeline',
-    client: 'Nova Logistics Global',
-    category: 'Cloud Solutions',
-    description: 'Architected a multi-region, highly available, and auto-scaling Kubernetes cluster infrastructure incorporating automated CI/CD scans.',
-    tags: ['AWS', 'Docker', 'Kubernetes', 'Terraform', 'GitHub Actions'],
-    image: 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    title: 'Zenith AI Customer Intelligence',
-    client: 'Zenith Retail',
-    category: 'AI Solutions',
-    description: 'Designed an intelligent analytics engine that parses client interactions across web-chat, voice transcripts, and emails.',
-    tags: ['Python', 'FastAPI', 'Next.js', 'OpenAI', 'MongoDB', 'LangChain'],
-    image: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=800&q=80',
-  }
-];
-
 export default function HomePage() {
-  const [projects, setProjects] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [projects, setProjects] = useState<any[]>(fallbackProjects.slice(0, 3));
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const response = await axios.get(`${API_URL}/projects`);
         if (response.data?.success && response.data?.data?.length > 0) {
-          // Take first 3 projects
-          setProjects(response.data.data.slice(0, 3));
+          const merged = [...fallbackProjects];
+          response.data.data.forEach((apiProj: any) => {
+            const index = merged.findIndex(localProj => localProj.title.toLowerCase() === apiProj.title.toLowerCase());
+            if (index !== -1) {
+              merged[index] = {
+                ...merged[index],
+                ...apiProj,
+                slug: merged[index].slug,
+                id: apiProj._id,
+                _id: apiProj._id,
+                github: merged[index].github,
+                displayCategory: merged[index].displayCategory || merged[index].category,
+              };
+            }
+          });
+          setProjects(merged.slice(0, 3));
         } else {
-          setProjects(fallbackProjects);
+          setProjects(fallbackProjects.slice(0, 3));
         }
       } catch (error) {
         console.warn('[Home Page] API offline or error. Using fallback static projects:', error);
-        setProjects(fallbackProjects);
+        setProjects(fallbackProjects.slice(0, 3));
       } finally {
         setLoading(false);
       }
@@ -218,45 +226,73 @@ export default function HomePage() {
               projects.map((proj, idx) => (
                 <motion.div
                   key={idx}
-                  className="h-full flex"
+                  className="h-full flex cursor-pointer"
                 >
                   <GlowCard
                     glowColor={getGlowColorForProject(proj.category)}
                     customSize={true}
                     className="group rounded-3xl overflow-hidden flex flex-col justify-between w-full h-full border border-card-border/60"
                   >
-                    <div>
-                      {/* Visual Card Image */}
-                      <div className="h-48 relative overflow-hidden bg-muted">
-                        <img
-                          src={proj.image}
-                          alt={proj.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                        />
-                        <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-background/95 backdrop-blur-sm text-[10px] font-bold text-primary border border-card-border">
-                          {proj.category}
+                    <div className="flex-grow flex flex-col justify-between h-full">
+                      <div>
+                        {/* Visual Card Image */}
+                        <div className="h-48 relative overflow-hidden bg-muted">
+                          <img
+                            src={proj.image}
+                            alt={proj.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                          <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-background/95 backdrop-blur-sm text-[10px] font-bold text-primary border border-card-border">
+                            {proj.category}
+                          </div>
+                        </div>
+
+                        <div className="p-6 space-y-3">
+                          <span className="text-[10px] font-semibold text-muted uppercase tracking-wider">Client: {proj.client}</span>
+                          <h4 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                            {proj.title}
+                          </h4>
+                          <p className="text-muted text-xs leading-relaxed line-clamp-3">
+                            {proj.description}
+                          </p>
                         </div>
                       </div>
 
-                      <div className="p-6 space-y-3">
-                        <span className="text-[10px] font-semibold text-muted uppercase tracking-wider">Client: {proj.client}</span>
-                        <h4 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
-                          {proj.title}
-                        </h4>
-                        <p className="text-muted text-xs leading-relaxed line-clamp-3">
-                          {proj.description}
-                        </p>
-                      </div>
-                    </div>
+                      <div className="p-6 pt-0 mt-4 space-y-4">
+                        <div className="flex flex-wrap gap-1.5 pt-4 border-t border-card-border/50">
+                          {proj.tags.slice(0, 3).map((t: string, ti: number) => (
+                            <span key={ti} className="px-2 py-0.5 rounded-lg bg-card text-foreground/80 border border-card-border/40 text-[9px] font-semibold">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
 
-                    <div className="p-6 pt-0 mt-4">
-                      <div className="flex flex-wrap gap-1.5 pt-4 border-t border-card-border/50">
-                        {proj.tags.slice(0, 3).map((t: string, ti: number) => (
-                          <span key={ti} className="px-2 py-0.5 rounded-lg bg-card text-foreground/80 border border-card-border/40 text-[9px] font-semibold">
-                            {t}
-                          </span>
-                        ))}
+                        <div className="flex items-center justify-between gap-3 pt-2">
+                          {proj.github ? (
+                            <a
+                              href={proj.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="p-2 rounded-xl bg-background border border-card-border hover:border-primary text-muted hover:text-primary transition-all flex items-center justify-center cursor-pointer"
+                              title="GitHub Code"
+                            >
+                              <Github size={16} />
+                            </a>
+                          ) : (
+                            <div className="w-9 h-9" />
+                          )}
+
+                          <Link
+                            href={`/projects/${proj.slug}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="px-4 py-2 rounded-xl btn-liquid-secondary text-foreground text-xs font-bold flex items-center space-x-1 transition-all cursor-pointer"
+                          >
+                            <span>View Details</span>
+                            <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </GlowCard>

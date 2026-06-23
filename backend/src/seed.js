@@ -101,6 +101,36 @@ const projects = [
       'Load Time': '0.9 seconds',
     },
   },
+  {
+    title: 'AI Virtual Mouse',
+    client: 'Open Source',
+    category: 'AI Solutions',
+    duration: '2 Months',
+    description: 'An AI-powered virtual mouse that allows users to control the computer cursor using real-time hand gestures captured through a webcam.',
+    tags: ['Python', 'OpenCV', 'MediaPipe', 'PyAutoGUI', 'NumPy'],
+    image: '/projects/ai-virtual-mouse.png',
+    link: 'https://github.com/chandan-kumar345/AI-virtual-mouse',
+    features: [
+      'Real-time hand tracking',
+      'Cursor movement',
+      'Left click',
+      'Right click',
+      'Double click',
+      'Drag and drop',
+      'Scroll up & down',
+      'Gesture recognition',
+      'Smooth cursor movement',
+      'High accuracy',
+      'Low latency',
+      'Webcam-based interaction',
+      'Touch-free computer control',
+    ],
+    stats: {
+      'Tracking Latency': '< 15ms',
+      'Accuracy Rate': '98%',
+      'Frame Rate': '30 FPS',
+    },
+  },
 ];
 
 const blogs = [
