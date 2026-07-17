@@ -8,7 +8,9 @@ import { GlowCard } from '@/components/ui/spotlight-card';
 import { 
   ArrowLeft, ExternalLink, Calendar, Briefcase, Sparkles, Check, 
   ArrowRight, ShieldCheck, CheckCircle2, ChevronRight, Activity, Camera, 
-  Video, Cpu, MousePointer, Hand, Fingerprint, Star, GitFork, BookOpen, Clock
+  Video, Cpu, MousePointer, Hand, Fingerprint, Star, GitFork, BookOpen, Clock,
+  Search, Database, Smartphone, MessageSquare, Mic, TrendingUp, ShoppingCart,
+  Globe, Lock, Server, Wifi
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -42,7 +44,18 @@ const iconMap: Record<string, React.ComponentType<any>> = {
   Activity: Activity,
   Fingerprint: Fingerprint,
   Cpu: Cpu,
-  MousePointer: MousePointer
+  MousePointer: MousePointer,
+  Search: Search,
+  Database: Database,
+  Smartphone: Smartphone,
+  MessageSquare: MessageSquare,
+  Mic: Mic,
+  TrendingUp: TrendingUp,
+  ShoppingCart: ShoppingCart,
+  Globe: Globe,
+  Lock: Lock,
+  Server: Server,
+  Wifi: Wifi
 };
 
 export default function ProjectDetailsPage() {
@@ -127,6 +140,18 @@ export default function ProjectDetailsPage() {
         >
           {/* Hero text */}
           <div className="lg:col-span-7 space-y-6">
+            {project.logo && (
+              <motion.div 
+                variants={itemVariants} 
+                className="mb-4 max-w-[280px]"
+              >
+                <img 
+                  src={project.logo} 
+                  alt={`${project.title} Logo`} 
+                  className="w-full h-auto object-contain max-h-[70px]" 
+                />
+              </motion.div>
+            )}
             <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-3">
               <span className="px-3.5 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-extrabold uppercase border border-primary/20 tracking-wider">
                 {project.category}
@@ -224,19 +249,27 @@ export default function ProjectDetailsPage() {
               <span>Project Overview & Vision</span>
             </h2>
             <h3 className="text-2xl sm:text-3xl font-bold text-foreground">
-              Translating Computer Vision Into Natural Interactions
+              {project.aboutTitle || "Translating Computer Vision Into Natural Interactions"}
             </h3>
             
             <div className="space-y-4 text-muted text-sm sm:text-base leading-relaxed">
-              <p>
-                The <strong>AI Virtual Mouse</strong> is an innovative computer vision solution developed in Python. It is designed to act as a human-computer interface (HCI) that replaces the traditional physical mouse hardware with touchless, real-time hand gestures.
-              </p>
-              <p>
-                Using a standard computer webcam, the application captures a live video stream. The system continually feeds these frames into <strong>MediaPipe</strong>, which uses machine learning to isolate the hand and extract the precise 3D spatial coordinates of 21 landmark nodes on the hand. 
-              </p>
-              <p>
-                These coordinates are processed with <strong>OpenCV</strong> to normalize spatial scaling and screen mapping ratios. When specific finger coordinate patterns (gestures) are identified—such as bringing the index and middle fingers together—the system interprets the action and triggers native OS mouse actions programmatically using <strong>PyAutoGUI</strong>. This provides users with natural, responsive, and tactile control over cursor tracking, click types, dragging, and scrolling.
-              </p>
+              {project.aboutDescription ? (
+                project.aboutDescription.map((pText, pIdx) => (
+                  <p key={pIdx}>{pText}</p>
+                ))
+              ) : (
+                <>
+                  <p>
+                    The <strong>AI Virtual Mouse</strong> is an innovative computer vision solution developed in Python. It is designed to act as a human-computer interface (HCI) that replaces the traditional physical mouse hardware with touchless, real-time hand gestures.
+                  </p>
+                  <p>
+                    Using a standard computer webcam, the application captures a live video stream. The system continually feeds these frames into <strong>MediaPipe</strong>, which uses machine learning to isolate the hand and extract the precise 3D spatial coordinates of 21 landmark nodes on the hand. 
+                  </p>
+                  <p>
+                    These coordinates are processed with <strong>OpenCV</strong> to normalize spatial scaling and screen mapping ratios. When specific finger coordinate patterns (gestures) are identified—such as bringing the index and middle fingers together—the system interprets the action and triggers native OS mouse actions programmatically using <strong>PyAutoGUI</strong>. This provides users with natural, responsive, and tactile control over cursor tracking, click types, dragging, and scrolling.
+                  </p>
+                </>
+              )}
             </div>
           </div>
 
@@ -384,14 +417,14 @@ export default function ProjectDetailsPage() {
             {/* Horizontally scrollable container with customized drag hint */}
             <div className="w-full overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent">
               <div className="flex flex-row items-center justify-between gap-4 min-w-[900px] relative px-4 py-2">
-                {[
+                {(project.architectureWorkflow || [
                   { name: 'Webcam', desc: 'Video Input Capture' },
                   { name: 'OpenCV', desc: 'Frame Pre-processing' },
                   { name: 'MediaPipe', desc: 'Landmark Extraction' },
                   { name: 'Gesture Recog.', desc: 'State Matrix Calculations' },
                   { name: 'PyAutoGUI', desc: 'Native OS API Mapping' },
                   { name: 'Mouse Control', desc: 'System Events Output' }
-                ].map((node, nIdx) => (
+                ]).map((node, nIdx) => (
                   <React.Fragment key={node.name}>
                     {/* Node Card */}
                     <motion.div 
@@ -407,7 +440,7 @@ export default function ProjectDetailsPage() {
                     </motion.div>
 
                     {/* Connecting Arrow */}
-                    {nIdx < 5 && (
+                    {nIdx < (project.architectureWorkflow?.length || 6) - 1 && (
                       <div className="flex items-center justify-center">
                         <div className="flex items-center space-x-1 text-primary">
                           <motion.div 
@@ -447,7 +480,7 @@ export default function ProjectDetailsPage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
-            {[
+            {(project.techStackDetailed || [
               { name: 'Python', role: 'Programming Language' },
               { name: 'OpenCV', role: 'Computer Vision API' },
               { name: 'MediaPipe', role: 'Machine Learning ML' },
@@ -455,7 +488,7 @@ export default function ProjectDetailsPage() {
               { name: 'NumPy', role: 'Array Calculations' },
               { name: 'Computer Vision', role: 'Concept / Mechanics' },
               { name: 'AI', role: 'Spatial Analytics' }
-            ].map((tech, tIdx) => (
+            ]).map((tech, tIdx) => (
               <motion.div
                 key={tech.name}
                 initial={{ opacity: 0, y: 15 }}
@@ -581,84 +614,86 @@ export default function ProjectDetailsPage() {
         )}
 
         {/* 10. GITHUB OVERVIEW CARD */}
-        <motion.section 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="pt-10"
-        >
-          <div className="max-w-4xl mx-auto">
-            <GlowCard 
-              glowColor="purple"
-              customSize={true}
-              className="rounded-3xl border border-card-border/80 bg-card p-6 sm:p-10 shadow-xl overflow-hidden relative"
-            >
-              {/* Mock GitHub Header */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border-b border-card-border/60 pb-6 mb-6">
-                <div className="flex items-center space-x-3.5">
-                  <div className="w-12 h-12 rounded-xl bg-foreground text-background flex items-center justify-center">
-                    <Github size={24} />
+        {project.github && (
+          <motion.section 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="pt-10"
+          >
+            <div className="max-w-4xl mx-auto">
+              <GlowCard 
+                glowColor="purple"
+                customSize={true}
+                className="rounded-3xl border border-card-border/80 bg-card p-6 sm:p-10 shadow-xl overflow-hidden relative"
+              >
+                {/* Mock GitHub Header */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border-b border-card-border/60 pb-6 mb-6">
+                  <div className="flex items-center space-x-3.5">
+                    <div className="w-12 h-12 rounded-xl bg-foreground text-background flex items-center justify-center">
+                      <Github size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-extrabold text-foreground text-lg sm:text-xl flex items-center gap-1.5 leading-none">
+                        <span>{project.githubRepo || project.github.replace('https://github.com/', '').replace(/\/$/, '')}</span>
+                      </h4>
+                      <p className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider font-bold">Public Repository</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-extrabold text-foreground text-lg sm:text-xl flex items-center gap-1.5 leading-none">
-                      <span>chandan-kumar345 / AI-virtual-mouse</span>
-                    </h4>
-                    <p className="text-[10px] text-muted-foreground mt-1 uppercase tracking-wider font-bold">Public Repository</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  <span className="px-3 py-1.5 rounded-full bg-background border border-card-border/80 text-[10px] font-bold text-muted flex items-center gap-1">
-                    <Star size={12} className="text-yellow-500 fill-yellow-500" />
-                    <span>GitHub Starred</span>
-                  </span>
-                  <span className="px-3 py-1.5 rounded-full bg-background border border-card-border/80 text-[10px] font-bold text-muted flex items-center gap-1">
-                    <GitFork size={12} />
-                    <span>Open Source</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Repo Body Info */}
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                <div className="md:col-span-8 space-y-4">
-                  <h5 className="font-extrabold text-foreground text-sm uppercase tracking-wider flex items-center gap-1.5">
-                    <BookOpen size={14} />
-                    <span>Repository Overview</span>
-                  </h5>
-                  <p className="text-muted text-xs sm:text-sm leading-relaxed">
-                    This repository hosts the complete source code, coordinate mapping models, gesture definition scripts, and environment presets for the virtual mouse system. Included in the documentation are calibration guides, coordinate scaling matrices, and threshold configurations.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    {['Python', 'OpenCV', 'MediaPipe', 'NumPy', 'Shell'].map((l) => (
-                      <span key={l} className="px-2.5 py-0.5 rounded-md bg-background text-[9px] font-semibold border border-card-border text-foreground/80">
-                        {l}
-                      </span>
-                    ))}
+                  
+                  <div className="flex items-center space-x-2">
+                    <span className="px-3 py-1.5 rounded-full bg-background border border-card-border/80 text-[10px] font-bold text-muted flex items-center gap-1">
+                      <Star size={12} className="text-yellow-500 fill-yellow-500" />
+                      <span>GitHub Starred</span>
+                    </span>
+                    <span className="px-3 py-1.5 rounded-full bg-background border border-card-border/80 text-[10px] font-bold text-muted flex items-center gap-1">
+                      <GitFork size={12} />
+                      <span>Open Source</span>
+                    </span>
                   </div>
                 </div>
 
-                <div className="md:col-span-4 flex flex-col gap-3">
-                  <a
-                    href="https://github.com/chandan-kumar345/AI-virtual-mouse"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full py-3 rounded-xl btn-liquid text-white font-semibold text-xs flex items-center justify-center space-x-2 shadow-md shadow-primary/10 transition-all cursor-pointer"
-                  >
-                    <Github size={14} />
-                    <span>Checkout Repository</span>
-                  </a>
-                  <a
-                    href="https://github.com/chandan-kumar345/AI-virtual-mouse/archive/refs/heads/main.zip"
-                    className="w-full py-3 rounded-xl btn-liquid-secondary text-foreground/90 font-semibold text-xs flex items-center justify-center space-x-1.5 transition-all cursor-pointer"
-                  >
-                    <span>Download Source ZIP</span>
-                  </a>
+                {/* Repo Body Info */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                  <div className="md:col-span-8 space-y-4">
+                    <h5 className="font-extrabold text-foreground text-sm uppercase tracking-wider flex items-center gap-1.5">
+                      <BookOpen size={14} />
+                      <span>Repository Overview</span>
+                    </h5>
+                    <p className="text-muted text-xs sm:text-sm leading-relaxed">
+                      {project.githubDescription || "This repository hosts the complete source code, components, assets, and documentation structure for this project."}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 pt-2">
+                      {(project.tags || ['Next.js', 'TypeScript', 'React']).map((l) => (
+                        <span key={l} className="px-2.5 py-0.5 rounded-md bg-background text-[9px] font-semibold border border-card-border text-foreground/80">
+                          {l}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="md:col-span-4 flex flex-col gap-3">
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full py-3 rounded-xl btn-liquid text-white font-semibold text-xs flex items-center justify-center space-x-2 shadow-md shadow-primary/10 transition-all cursor-pointer"
+                    >
+                      <Github size={14} />
+                      <span>Checkout Repository</span>
+                    </a>
+                    <a
+                      href={`${project.github.replace(/\/$/, '')}/archive/refs/heads/main.zip`}
+                      className="w-full py-3 rounded-xl btn-liquid-secondary text-foreground/90 font-semibold text-xs flex items-center justify-center space-x-1.5 transition-all cursor-pointer"
+                    >
+                      <span>Download Source ZIP</span>
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </GlowCard>
-          </div>
-        </motion.section>
+              </GlowCard>
+            </div>
+          </motion.section>
+        )}
       </div>
 
       {/* Lightbox Overlay */}

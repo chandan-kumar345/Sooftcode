@@ -9,17 +9,17 @@ const contactChannels = [
     icon: Mail,
     label: "Email Channels",
     items: [
-      { name: "General Inquiries", val: "contact@sooftcode.com" },
-      { name: "Client Consultations", val: "book@sooftcode.com" },
-      { name: "Careers & HR Team", val: "talent@sooftcode.com" }
+      { name: "General Inquiries", val: "sooftcode@gmail.com" },
+      { name: "Client Consultations", val: "sooftcode@gmail.com" },
+      { name: "Careers & HR Team", val: "sooftcode@gmail.com" }
     ]
   },
   {
     icon: Phone,
     label: "Phone Lines",
     items: [
-      { name: "Global Operations Desk", val: "+1 (800) 555-0199" },
-      { name: "Support Escalations", val: "+1 (800) 555-0245" }
+      { name: "Global Operations Desk", val: "+91 9709593705" },
+      { name: "Support Escalations", val: "+91 9709593705" }
     ]
   },
   {

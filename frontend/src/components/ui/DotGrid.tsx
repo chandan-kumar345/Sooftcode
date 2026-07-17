@@ -158,7 +158,7 @@ const DotGrid: React.FC<DotGridProps> = ({
           const g = Math.round(baseRgb.g + (activeRgb.g - baseRgb.g) * t);
           const b = Math.round(baseRgb.b + (activeRgb.b - baseRgb.b) * t);
           styleColor = `rgb(${r},${g},${b})`;
-          
+
           // Make dots expand smoothly up to 1.9x when hovered to create a popping effect
           scaleFactor = 1.0 + t * 0.9;
         }
@@ -240,7 +240,7 @@ const DotGrid: React.FC<DotGridProps> = ({
           gsap.to(dot, {
             xOffset: pushX,
             yOffset: pushY,
-            duration: 0.35,
+            duration: 0.20,
             ease: 'power2.out',
             onComplete: () => {
               gsap.to(dot, {
@@ -256,7 +256,7 @@ const DotGrid: React.FC<DotGridProps> = ({
       }
     };
 
-    const throttledMove = throttle(onMove, 50);
+    const throttledMove = throttle(onMove, 10);
     window.addEventListener('mousemove', throttledMove, { passive: true });
 
     return () => {

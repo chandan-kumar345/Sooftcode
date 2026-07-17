@@ -1,5 +1,6 @@
 import Inquiry from '../models/Inquiry.js';
 import Subscriber from '../models/Subscriber.js';
+import sendEmail from '../utils/sendEmail.js';
 
 // @desc    Submit a contact inquiry
 // @route   POST /api/inquiries
@@ -19,6 +20,17 @@ export const submitInquiry = async (req, res, next) => {
       subject,
       message,
     });
+    // Send email notification to official address (fire-and-forget, don't block response)
+    try {
+      const emailBody = `New Consultation Lead\n\nName: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`;
+      sendEmail({
+        to: 'sooftcode@gmail.com',
+        subject: `[New Consultation Lead] ${subject}`,
+        text: emailBody,
+      }).catch(err => console.error('[Inquiry] Email notification failed:', err.message));
+    } catch (emailErr) {
+      console.error('[Inquiry] Email setup error:', emailErr.message);
+    }
 
     res.status(201).json({
       success: true,

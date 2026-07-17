@@ -131,6 +131,119 @@ const projects = [
       'Frame Rate': '30 FPS',
     },
   },
+  {
+    title: 'AniVerse - Anime Streaming Portal',
+    client: 'AniVerse Community (Open Source)',
+    category: 'Web Development',
+    duration: '3 Months',
+    description: 'A state-of-the-art anime tracker and streaming platform featuring high-fidelity media players, comprehensive anime discovery schemas, and a social tracking dashboard.',
+    tags: ['Next.js', 'TypeScript', 'GraphQL', 'Tailwind CSS', 'Framer Motion', 'Hls.js'],
+    image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=800&q=80',
+    link: 'https://github.com/chandan-kumar345/AniVerse',
+    features: [
+      'Dynamic Anime Search & Multi-criteria Filtering',
+      'High-Performance HLS Video Streaming Player Integration',
+      'Personalized watchlist tracker with interactive user dashboards',
+      'Real-time episodes schedule and releasing notifications',
+      'Social reviews, user ratings, and anime discussion forums',
+      'Immersive dark mode with glassmorphism layout animations'
+    ],
+    stats: {
+      'Streaming Latency': '< 120ms',
+      'Active Monthly Users': '25K+',
+      'Page Load Speed': '0.85s',
+    },
+  },
+  {
+    title: 'Roamify - Travel Booking Platform',
+    client: 'Roamify International LLC',
+    category: 'Web Development',
+    duration: '4 Months',
+    description: 'An elegant travel booking portal offering interactive destination search, dynamic itinerary planners, flight-hotel aggregators, and immersive virtual tours.',
+    tags: ['Next.js', 'Prisma', 'PostgreSQL', 'Tailwind CSS', 'Mapbox', 'Stripe'],
+    image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80',
+    link: 'https://roamify-booking.example.com',
+    features: [
+      'Interactive map search integration using Mapbox GL',
+      'Multi-city hotel and flight booking aggregator',
+      'Real-time collaborative trip itinerary builders',
+      'Secure multi-currency checkout via Stripe integration',
+      'Personalized recommendations based on budget and category',
+      'Dynamic user reviews and photo gallery uploads'
+    ],
+    stats: {
+      'Booking Success': '99.7%',
+      'Search API Speed': '150ms',
+      'Monthly Bookings': '8.5K+',
+    },
+  },
+  {
+    title: 'Apex POS - Cloud Point of Sale',
+    client: 'Apex Retail Solutions',
+    category: 'SaaS Development',
+    duration: '5 Months',
+    description: 'An enterprise-grade point of sale system with offline capabilities, real-time inventory synchronization, dynamic tax calculations, and barcode scanner integration.',
+    tags: ['React', 'Node.js', 'Electron', 'SQLite', 'Tailwind CSS', 'Express'],
+    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=800&q=80',
+    link: 'https://apex-pos.example.com',
+    features: [
+      'Robust offline billing mode with local SQLite sync',
+      'Real-time stock and multi-store inventory tracking',
+      'Receipt printer, barcode scanner, and cash drawer hardware integrations',
+      'Dynamic discount vouchers and local taxation rules',
+      'Comprehensive sales analytics dashboards and report export',
+      'Role-based login authorization for cashiers and managers'
+    ],
+    stats: {
+      'Transaction Latency': '< 50ms',
+      'Hardware Sync': '99.99%',
+      'Daily Sales Count': '12K+',
+    },
+  },
+  {
+    title: 'VoxAI - Conversational Voice Assistant',
+    client: 'VoxAI Labs (SaaS Tool)',
+    category: 'AI Solutions',
+    duration: '3 Months',
+    description: 'A real-time voice assistant that processes speech input, reasons using advanced Large Language Models, and responds with lifelike voice synthesis under low latency.',
+    tags: ['Python', 'WebSockets', 'Whisper API', 'GPT-4', 'FastAPI', 'Coqui TTS'],
+    image: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&w=800&q=80',
+    features: [
+      'Ultra-low latency speech-to-text translation using Whisper',
+      'Context-aware conversational reasoning backed by GPT-4',
+      'Natural voice response generation using advanced Coqui TTS models',
+      'WebSocket connections for streaming audio packets back and forth',
+      'Intelligent smart-home triggers and calendar scheduling actions',
+      'Background noise cancellation and echo isolation filters'
+    ],
+    stats: {
+      'Audio Latency': '< 800ms',
+      'STT Accuracy': '97.5%',
+      'Daily Voice Queries': '30K+',
+    },
+  },
+  {
+    title: 'SoulSync - Dating App & Platform',
+    client: 'SoulSync Dating Networks',
+    category: 'Mobile App Development',
+    duration: '6 Months',
+    description: 'A cross-platform dating application featuring spatial location matching, interactive chat rooms, video profiles, and personality compatibility algorithms.',
+    tags: ['Flutter', 'React', 'Node.js', 'MongoDB', 'Socket.io', 'Google Maps'],
+    image: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80',
+    features: [
+      'Geospatial coordinate matching using MongoDB GeoJSON',
+      'Real-time chat messaging with dynamic status alerts',
+      'Video profile uploads with adaptive media transcoding',
+      'Intelligent compatibility matching based on interests',
+      'Face verification using AI facial recognition APIs',
+      'In-app subscription upgrades and profile boosts'
+    ],
+    stats: {
+      'Matches Created': '1.2M+',
+      'Chat Sync Latency': '< 30ms',
+      'App Downloads': '350K+',
+    },
+  },
 ];
 
 const blogs = [
