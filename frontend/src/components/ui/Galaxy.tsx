@@ -37,6 +37,7 @@ uniform float uRepulsionStrength;
 uniform float uMouseActiveFactor;
 uniform float uAutoCenterRepulsion;
 uniform bool uTransparent;
+uniform float uLightMode;
 
 varying vec2 vUv;
 
@@ -73,12 +74,12 @@ vec3 hsv2rgb(vec3 c) {
 
 float Star(vec2 uv, float flare) {
   float d = length(uv);
-  float m = (0.05 * uGlowIntensity) / d;
+  float m = (0.02 * uGlowIntensity) / d;
   float rays = smoothstep(0.0, 1.0, 1.0 - abs(uv.x * uv.y * 1000.0));
-  m += rays * flare * uGlowIntensity;
+  m += rays * flare * 0.4 * uGlowIntensity;
   uv *= MAT45;
   rays = smoothstep(0.0, 1.0, 1.0 - abs(uv.x * uv.y * 1000.0));
-  m += rays * 0.3 * flare * uGlowIntensity;
+  m += rays * 0.12 * flare * uGlowIntensity;
   m *= smoothstep(1.0, 0.2, d);
   return m;
 }
@@ -103,10 +104,23 @@ vec3 StarLayer(vec2 uv) {
       float grn = min(red, blu) * seed;
       vec3 base = vec3(red, grn, blu);
       
-      float hue = atan(base.g - base.r, base.b - base.r) / (2.0 * 3.14159) + 0.5;
-      hue = fract(hue + uHueShift / 360.0);
-      float sat = length(base - vec3(dot(base, vec3(0.299, 0.587, 0.114)))) * uSaturation;
-      float val = max(max(base.r, base.g), base.b);
+      float hueDark = atan(base.g - base.r, base.b - base.r) / (2.0 * 3.14159) + 0.5;
+      hueDark = fract(hueDark + uHueShift / 360.0);
+      float satDark = length(base - vec3(dot(base, vec3(0.299, 0.587, 0.114)))) * uSaturation;
+      float valDark = max(max(base.r, base.g), base.b);
+
+      float hueRand = Hash21(si + 12.34);
+      // Indigo (#4A00E0) is around 260 deg, Violet (#8E2DE2) is around 280 deg.
+      // So vary between 250 and 290 deg.
+      float hueLight = fract((250.0 + hueRand * 40.0) / 360.0);
+      float satLight = mix(0.75, 0.95, Hash21(si + 56.78));
+      // In light mode, the stars should be darker indigo/violet/purple to stand out on the light grey background
+      float valLight = mix(0.35, 0.60, Hash21(si + 90.12));
+
+      float hue = mix(hueDark, hueLight, uLightMode);
+      float sat = mix(satDark, satLight, uLightMode);
+      float val = mix(valDark, valLight, uLightMode);
+
       base = hsv2rgb(vec3(hue, sat, val));
 
       vec2 pad = vec2(tris(seed * 34.0 + uTime * uSpeed / 10.0), tris(seed * 38.0 + uTime * uSpeed / 30.0)) - 0.5;
@@ -165,7 +179,15 @@ void main() {
     float alpha = length(col);
     alpha = smoothstep(0.0, 0.3, alpha);
     alpha = min(alpha, 1.0);
-    gl_FragColor = vec4(col, alpha);
+    
+    vec3 finalCol = col;
+    if (alpha > 0.001) {
+      // In light mode, divide the color by alpha to prevent the blendFunc multiplier from double-multiplying and creating dark halos
+      vec3 correctedCol = col / alpha;
+      finalCol = mix(col, correctedCol, uLightMode);
+    }
+    
+    gl_FragColor = vec4(finalCol, alpha);
   } else {
     gl_FragColor = vec4(col, 1.0);
   }
@@ -189,6 +211,7 @@ export interface GalaxyProps {
   rotationSpeed?: number;
   autoCenterRepulsion?: number;
   transparent?: boolean;
+  lightMode?: boolean;
   [key: string]: any;
 }
 
@@ -209,6 +232,7 @@ export default function Galaxy({
   rotationSpeed = 0.1,
   autoCenterRepulsion = 0,
   transparent = true,
+  lightMode = false,
   ...rest
 }: GalaxyProps) {
   const ctnDom = useRef<HTMLDivElement | null>(null);
@@ -216,6 +240,12 @@ export default function Galaxy({
   const smoothMousePos = useRef({ x: 0.5, y: 0.5 });
   const targetMouseActive = useRef(0.0);
   const smoothMouseActive = useRef(0.0);
+  const lightModeRef = useRef(lightMode);
+  const smoothLightMode = useRef(lightMode ? 1.0 : 0.0);
+
+  useEffect(() => {
+    lightModeRef.current = lightMode;
+  }, [lightMode]);
 
   useEffect(() => {
     if (!ctnDom.current) return;
@@ -276,7 +306,8 @@ export default function Galaxy({
         uRepulsionStrength: { value: repulsionStrength },
         uMouseActiveFactor: { value: 0.0 },
         uAutoCenterRepulsion: { value: autoCenterRepulsion },
-        uTransparent: { value: transparent }
+        uTransparent: { value: transparent },
+        uLightMode: { value: lightMode ? 1.0 : 0.0 }
       }
     });
 
@@ -289,6 +320,10 @@ export default function Galaxy({
         program.uniforms.uTime.value = t * 0.001;
         program.uniforms.uStarSpeed.value = (t * 0.001 * starSpeed) / 10.0;
       }
+
+      const targetLightMode = lightModeRef.current ? 1.0 : 0.0;
+      smoothLightMode.current += (targetLightMode - smoothLightMode.current) * 0.1;
+      program.uniforms.uLightMode.value = smoothLightMode.current;
 
       const lerpFactor = 0.05;
       smoothMousePos.current.x += (targetMousePos.current.x - smoothMousePos.current.x) * lerpFactor;

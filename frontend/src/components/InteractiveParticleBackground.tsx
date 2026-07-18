@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useTheme } from 'next-themes';
 import Galaxy from '@/components/ui/Galaxy';
 
 /**
@@ -10,6 +11,7 @@ import Galaxy from '@/components/ui/Galaxy';
  */
 export default function InteractiveParticleBackground() {
   const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
 
   // Avoid hydration mismatch by waiting for client mount
   useEffect(() => {
@@ -34,6 +36,7 @@ export default function InteractiveParticleBackground() {
         speed={0.15}
         rotationSpeed={0.005}
         twinkleIntensity={0.1}
+        lightMode={resolvedTheme === 'light'}
       />
     </div>
   );
