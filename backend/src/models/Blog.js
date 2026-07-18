@@ -60,5 +60,10 @@ const blogSchema = new mongoose.Schema(
   }
 );
 
+// Add database indexes for query optimization
+blogSchema.index({ isPublished: 1, publishedAt: -1 });
+blogSchema.index({ category: 1 });
+blogSchema.index({ tags: 1 });
+
 const Blog = mongoose.model('Blog', blogSchema);
 export default Blog;

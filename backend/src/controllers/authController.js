@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import logger from '../utils/logger.js';
 
 // Helper to sign JWT token
 const generateToken = (id) => {
@@ -13,10 +14,12 @@ const generateToken = (id) => {
 // @access  Public (for initial setup)
 export const registerUser = async (req, res, next) => {
   const { username, email, password, role } = req.body;
+  logger.security('User registration initiated', { username, email, role });
 
   try {
     const userExists = await User.findOne({ $or: [{ email }, { username }] });
     if (userExists) {
+      logger.security('User registration failed: User already exists', { username, email });
       res.status(400);
       throw new Error('User already exists with this email or username');
     }
@@ -29,6 +32,7 @@ export const registerUser = async (req, res, next) => {
     });
 
     if (user) {
+      logger.security('User registered successfully', { userId: user._id, username: user.username, role: user.role });
       res.status(201).json({
         success: true,
         data: {
@@ -40,10 +44,12 @@ export const registerUser = async (req, res, next) => {
         },
       });
     } else {
+      logger.security('User registration failed: Invalid user data', { username, email });
       res.status(400);
       throw new Error('Invalid user data');
     }
   } catch (error) {
+    logger.error('User registration exception', { error: error.message });
     next(error);
   }
 };
@@ -53,9 +59,11 @@ export const registerUser = async (req, res, next) => {
 // @access  Public
 export const loginUser = async (req, res, next) => {
   const { emailOrUsername, password } = req.body;
+  logger.security('Login attempt initiated', { emailOrUsername });
 
   try {
     if (!emailOrUsername || !password) {
+      logger.security('Login attempt failed: Missing credentials');
       res.status(400);
       throw new Error('Please enter username/email and password');
     }
@@ -65,6 +73,7 @@ export const loginUser = async (req, res, next) => {
     });
 
     if (user && (await user.matchPassword(password))) {
+      logger.security('Login successful', { userId: user._id, username: user.username, role: user.role });
       res.json({
         success: true,
         data: {
@@ -76,10 +85,12 @@ export const loginUser = async (req, res, next) => {
         },
       });
     } else {
+      logger.security('Login failed: Invalid credentials', { emailOrUsername });
       res.status(401);
       throw new Error('Invalid email/username or password');
     }
   } catch (error) {
+    logger.error('Login exception', { error: error.message });
     next(error);
   }
 };

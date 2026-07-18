@@ -23,6 +23,7 @@ export const getProjects = async (req, res, next) => {
 
     const projects = await Project.find(query).sort({ createdAt: -1 });
 
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=60');
     res.json({
       success: true,
       count: projects.length,
@@ -45,6 +46,7 @@ export const getProjectById = async (req, res, next) => {
       throw new Error('Project not found');
     }
 
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=60');
     res.json({
       success: true,
       data: project,

@@ -32,6 +32,7 @@ export const getBlogs = async (req, res, next) => {
       .limit(Number(limit))
       .skip(skipIndex);
 
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=60');
     res.json({
       success: true,
       count: blogs.length,
@@ -56,6 +57,7 @@ export const getBlogBySlug = async (req, res, next) => {
       throw new Error('Blog post not found');
     }
 
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=60');
     res.json({
       success: true,
       data: blog,

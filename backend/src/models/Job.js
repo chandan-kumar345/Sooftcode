@@ -73,5 +73,8 @@ const jobSchema = new mongoose.Schema(
   }
 );
 
+// Add database indexes for query optimization
+jobSchema.index({ isActive: 1, createdAt: -1 });
+
 const Job = mongoose.model('Job', jobSchema);
 export default Job;

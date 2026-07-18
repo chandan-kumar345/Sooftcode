@@ -5,8 +5,11 @@ import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import compression from 'compression';
+import morgan from 'morgan';
 
 import connectDB from './config/db.js';
+import logger from './utils/logger.js';
 import authRoutes from './routes/authRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
@@ -21,6 +24,16 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+// Payload compression for fast loading on low-performance/mobile devices
+app.use(compression());
+
+// Structured HTTP request logging via morgan
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms', {
+  stream: {
+    write: (message) => logger.info(`[HTTP] ${message.trim()}`)
+  }
+}));
 
 // Security middlewares
 app.use(helmet({
@@ -50,10 +63,14 @@ const limiter = rateLimit({
 // Apply to /api routes
 app.use('/api', limiter);
 
-// Static file hosting (resumes & local file uploads)
+// Static file hosting (resumes & local file uploads) with client-side caching for faster loading
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads'), {
+  maxAge: '7d', // Cache for 7 days
+  etag: true,
+  lastModified: true
+}));
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -77,5 +94,5 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`[Server] Active in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  logger.info(`[Server] Active in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });

@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import logger from './logger.js';
 
 /**
  * sendEmail
@@ -10,12 +11,9 @@ const sendEmail = async (options) => {
   const hasSmtpConfig = process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS;
 
   if (!hasSmtpConfig) {
-    console.warn('\n=========================================');
-    console.warn('[Email Service] WARNING: SMTP credentials are not fully configured in environment variables.');
-    console.warn(`[Email Service] Mock Send to: ${options.to}`);
-    console.warn(`[Email Service] Subject: ${options.subject}`);
-    console.warn(`[Email Service] Body:\n${options.text}`);
-    console.warn('=========================================\n');
+    logger.warn('[Email Service] WARNING: SMTP credentials are not fully configured in environment variables.');
+    logger.info(`[Email Service] Mock Send to: ${options.to} | Subject: ${options.subject}`);
+    logger.debug(`[Email Service] Mock Body:\n${options.text}`);
     return { mock: true, message: 'Email logged in console because SMTP is not configured.' };
   }
 
@@ -40,10 +38,10 @@ const sendEmail = async (options) => {
       html: options.html,
     });
 
-    console.log(`[Email Service] Email sent successfully to ${options.to}: ${info.messageId}`);
+    logger.info(`[Email Service] Email sent successfully to ${options.to}: ${info.messageId}`);
     return info;
   } catch (error) {
-    console.error(`[Email Service] Failed to send email to ${options.to}: ${error.message}`);
+    logger.error(`[Email Service] Failed to send email to ${options.to}: ${error.message}`);
     throw error;
   }
 };

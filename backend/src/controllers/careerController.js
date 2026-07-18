@@ -7,6 +7,7 @@ export const getJobs = async (req, res, next) => {
   try {
     const jobs = await Job.find({ isActive: true }).sort({ createdAt: -1 });
 
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=60');
     res.json({
       success: true,
       count: jobs.length,
@@ -29,6 +30,7 @@ export const getJobById = async (req, res, next) => {
       throw new Error('Job listing not found or inactive');
     }
 
+    res.set('Cache-Control', 'public, max-age=60, s-maxage=60');
     res.json({
       success: true,
       data: job,
